@@ -28,6 +28,13 @@ Ask the user to choose one of:
 - Use the current directory as the workshop root
 - Create a new subdirectory using the workshop name
 
+**Deriving the workshop name from the directory:**
+
+If the user chooses to use the current working directory:
+1. Check if the directory name satisfies the naming convention (lowercase, dashes allowed, max 25 characters). Note: the `lab-` prefix is recommended but not required when using the directory name.
+2. If it does, use the directory name as the workshop name
+3. If it does not satisfy the requirements, infer an appropriate name from the workshop topic or title, but confirm with the user before proceeding (unless they already explicitly provided a name)
+
 ### 3. Determine Workshop Requirements
 
 The terminal application is always enabled by default. Always include it explicitly with `enabled: true` and `layout: split` for clarity.
