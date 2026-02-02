@@ -41,6 +41,31 @@ spec:
 | `spec.title` | Human-readable workshop title |
 | `spec.description` | One to two sentence description |
 
+## Workshop Files Configuration (CRITICAL)
+
+**ALWAYS use this exact structure for workshop file publishing:**
+
+```yaml
+spec:
+  publish:
+    image: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+  workshop:
+    files:
+    - image:
+        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+      includePaths:
+      - /workshop/**
+      - /exercises/**
+      - /README.md
+```
+
+Replace `{workshop-name}` with the actual workshop name from `metadata.name`.
+
+**IMPORTANT:**
+- The `$(image_repository)` and `$(workshop_version)` are variables that MUST be used exactly as shown
+- These variables are required for local workshop publishing and deployment workflows
+- **NEVER use `spec.content.files`** — this is a deprecated format and must not be used
+
 ## Session Applications
 
 Ask the user which tools the workshop requires. Include only the applications that are needed.

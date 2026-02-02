@@ -60,7 +60,29 @@ Create the following directory structure in the chosen location:
 
 Refer to [resources/workshop-yaml-reference.md](resources/workshop-yaml-reference.md) for the complete workshop.yaml structure and options.
 
-Generate the `resources/workshop.yaml` file based on the gathered details:
+Generate the `resources/workshop.yaml` file based on the gathered details.
+
+**CRITICAL: Use the correct publish and workshop.files format.**
+
+The workshop.yaml MUST include these sections with this exact structure (substituting the actual workshop name):
+
+```yaml
+spec:
+  publish:
+    image: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+  workshop:
+    files:
+    - image:
+        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+      includePaths:
+      - /workshop/**
+      - /exercises/**
+      - /README.md
+```
+
+**IMPORTANT:** Do NOT use `spec.content.files` — this is a deprecated format. Always use `spec.publish` and `spec.workshop.files` as shown above. The `$(image_repository)` and `$(workshop_version)` variables must be used exactly as shown to support local workshop publishing and deployment workflows.
+
+**Additional configuration:**
 
 - Set `metadata.name` to the workshop name
 - Set `spec.title` and `spec.description` from gathered details
