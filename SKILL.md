@@ -154,6 +154,10 @@ workshop/content/
 
 A page bundle is a directory containing `index.md` plus any associated assets (images, etc.).
 
+## Skill Version
+
+When asked about the skill version, read the `VERSION.txt` file and report its contents to the user.
+
 ## Getting Help
 
 For more information, visit the Educates documentation: https://docs.educates.dev/
