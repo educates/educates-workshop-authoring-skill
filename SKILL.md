@@ -2,7 +2,6 @@
 name: educates-authoring
 description: >
   Comprehensive guide for creating and configuring workshops for the Educates interactive training platform. Includes steps for creating workshops from scratch, configuring workshop definitions and content and writing workshop instructions. Use this skill when creating Educates workshops, configuring workshop settings or writing workshop content and instructions.
-user-invocable: true
 ---
 
 # Educates Workshop Authoring Skill
