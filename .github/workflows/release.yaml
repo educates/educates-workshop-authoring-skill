@@ -23,7 +23,7 @@ jobs:
         run: echo "${{ steps.version.outputs.VERSION }}" > VERSION.txt
 
       - name: Create skill package
-        run: zip -r educates-authoring.skill . -x ".git/*"
+        run: zip -r educates-authoring.skill . -x ".git/*" -x ".github/*"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

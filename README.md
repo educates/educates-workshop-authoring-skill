@@ -38,7 +38,7 @@ curl -fLO https://github.com/educates/educates-authoring-skill/releases/download
 2. Create an archive of the skill:
 
    ```bash
-   zip -r educates-authoring-skill.skill . -x ".git/*"
+   zip -r educates-authoring-skill.skill . -x ".git/*" -x ".github/*"
    ```
 
 ### Importing into Claude
