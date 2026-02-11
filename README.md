@@ -17,13 +17,13 @@ Pre-packaged `.skill` files are available from the [GitHub releases](https://git
 To download the latest release:
 
 ```bash
-curl -fLO https://github.com/educates/educates-authoring-skill/releases/latest/download/educates-authoring-skill.skill
+curl -fLO https://github.com/educates/educates-authoring-skill/releases/latest/download/educates-authoring.skill
 ```
 
 To download a specific version (replace `2.0` with the desired version tag):
 
 ```bash
-curl -fLO https://github.com/educates/educates-authoring-skill/releases/download/2.0/educates-authoring-skill.skill
+curl -fLO https://github.com/educates/educates-authoring-skill/releases/download/2.0/educates-authoring.skill
 ```
 
 ### From Source
