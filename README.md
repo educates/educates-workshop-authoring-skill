@@ -65,6 +65,23 @@ Or simply ask Claude to help create an Educates workshop and it will use the ski
 
 This skill is aligned with **Educates version 3.6.0**. Workshops generated using this skill may not work with older versions of Educates.
 
+## Other AI Agents
+
+Although this skill is being developed and tested with Claude, the skills format is standardised to a degree, so it may also work with other AI agents that support the same format. However, since Claude's built-in knowledge can vary compared to other agents, your success with other agents may differ. An agent with less prior knowledge of the Educates platform, or with different strengths in code generation and YAML authoring, may produce results of varying quality.
+
+## Feedback
+
+This skill is continually being improved, and your feedback helps make it better. If you notice areas where the generated workshops could be improved, or where the skill seems to lack knowledge about how Educates environments work and what they provide, please open an issue on the [GitHub issue tracker](https://github.com/educates/educates-authoring-skill/issues).
+
+Examples of useful feedback include:
+
+- Incorrect or suboptimal workshop configuration being generated
+- Missing awareness of Educates features or session applications
+- Workshop instructions that don't follow Educates best practices
+- Suggestions for additional capabilities the skill should support
+
+There's no need to submit a pull request — just describe the issue and we'll use AI itself to determine the best approach for incorporating any corrections or additional knowledge into the skill. Your feedback helps improve the skill's understanding of Educates for everyone.
+
 ## Documentation
 
 For more information about Educates, visit the official documentation at https://docs.educates.dev/
