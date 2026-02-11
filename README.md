@@ -61,6 +61,10 @@ Once installed, invoke the skill with:
 
 Or simply ask Claude to help create an Educates workshop and it will use the skill automatically based on context.
 
+## Compatibility
+
+This skill is aligned with **Educates version 3.6.0**. Workshops generated using this skill may not work with older versions of Educates.
+
 ## Documentation
 
 For more information about Educates, visit the official documentation at https://docs.educates.dev/
