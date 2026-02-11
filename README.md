@@ -10,26 +10,46 @@ A Claude Code skill for creating and configuring workshops for the [Educates](ht
 
 ## Installation
 
+### From GitHub Release
+
+Pre-packaged `.skill` files are available from the [GitHub releases](https://github.com/educates/educates-authoring-skill/releases) page.
+
+To download the latest release:
+
+```bash
+curl -fLO https://github.com/educates/educates-authoring-skill/releases/latest/download/educates-authoring-skill.skill
+```
+
+To download a specific version (replace `2.0` with the desired version tag):
+
+```bash
+curl -fLO https://github.com/educates/educates-authoring-skill/releases/download/2.0/educates-authoring-skill.skill
+```
+
 ### From Source
 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/educates-authoring-skill.git
+   git clone https://github.com/educates/educates-authoring-skill.git
    cd educates-authoring-skill
    ```
 
-2. Create a zip archive of the skill:
+2. Create an archive of the skill:
 
    ```bash
-   zip -r educates-authoring.zip . -x ".git/*"
+   zip -r educates-authoring-skill.skill . -x ".git/*"
    ```
 
-3. Import into Claude Code:
+### Importing into Claude
 
-   - Open Claude Code settings
-   - Navigate to Skills
-   - Click "Install from file" and select the `educates-authoring.zip` file
+Once you have the `.skill` file, either downloaded from a GitHub release or built from source, install it using the Claude Code CLI:
+
+```bash
+claude skill install educates-authoring-skill.skill
+```
+
+Or in the Claude Code desktop app, go to **Settings > Skills** and use "Install from file" to select the `.skill` file.
 
 ### Usage
 

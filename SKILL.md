@@ -105,6 +105,21 @@ spec:
 
 Workshop instructions are placed in the `workshop/content/` directory as Markdown files rendered by Hugo.
 
+#### Clickable Actions in Instructions
+
+Workshop instructions use clickable actions — special fenced code blocks that let users execute commands, edit files, and interact with the workshop environment by clicking. Refer to [resources/clickable-actions-reference.md](resources/clickable-actions-reference.md) for the complete list of action types and detailed syntax.
+
+**Critical YAML safety rule for terminal commands:** When generating `terminal:execute` clickable actions, always use YAML block scalar syntax (`command: |-`) if the command contains any characters that are special in YAML (colon, hash, curly braces, square brackets, etc.) or if the command spans multiple lines. This prevents the YAML parser from misinterpreting the command. For example:
+
+````markdown
+```terminal:execute
+command: |-
+  docker run --rm -p 8080:80 nginx:latest
+```
+````
+
+Also ensure that shell commands use correct quoting — variable expansions containing paths with spaces should be double-quoted, strings with special characters should be properly escaped, etc. See the "YAML Syntax Safety" section in the clickable actions reference for detailed guidance and examples.
+
 #### Page Structure
 
 Each page requires YAML frontmatter with at least a `title` property:
@@ -184,6 +199,7 @@ For detailed guidance on specific topics, see:
 
 - [Workshop YAML Reference](resources/workshop-yaml-reference.md) - Complete workshop.yaml structure and options
 - [Images in Workshop Pages](resources/images-in-workshop-pages.md) - How to include images using page bundles and static assets
+- [Clickable Actions Reference](resources/clickable-actions-reference.md) - Index of all clickable action types, YAML syntax safety guidance, and links to category-specific references in `resources/clickable-actions/`
 
 ## Skill Version
 
