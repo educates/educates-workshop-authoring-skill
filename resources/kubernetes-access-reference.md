@@ -264,3 +264,16 @@ session:
 Setting the policy to `baseline` relaxes the restrictions, allowing containers to run as root and bind to privileged ports.
 
 **IMPORTANT:** Only use `baseline` when the workshop genuinely requires it — for example, when deploying third-party images that run as root or web servers that listen on port 80. Keep the default `restricted` policy whenever possible.
+
+**Common images that require `baseline` policy:** Many popular container images run as root or bind to privileged ports by default and will fail under the `restricted` policy. Notable examples include:
+
+- **nginx** — runs as root and listens on port 80
+- **httpd** (Apache HTTP Server) — runs as root and listens on port 80
+- **mysql** / **mariadb** — run as root
+- **postgres** — runs as root
+- **redis** — runs as root
+- **mongo** — runs as root
+- **memcached** — runs as root
+- **elasticsearch** — runs as root
+
+If a workshop uses any of these images (or similar ones), set the security policy to `baseline`. When in doubt, check whether an image runs as a non-root user by looking for a `USER` directive in its Dockerfile — if there is none, it almost certainly runs as root and needs `baseline`.
