@@ -179,6 +179,8 @@ Selects (highlights) a YAML node at a specific path in the editor, including bot
 | `file` | string | (required) | File path |
 | `path` | string | — | YAML path. If omitted, the entire document is selected |
 
+Note: When workshop commentary describes YAML configuration, use this action to highlight the relevant sections of the YAML file, giving students visual context for what you are discussing.
+
 **Example:**
 
 ````markdown
