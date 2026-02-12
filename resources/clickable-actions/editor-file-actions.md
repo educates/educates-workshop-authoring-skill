@@ -77,6 +77,8 @@ Appends text to the end of a file. If the file does not exist, it will be create
 | `file` | string | (required) | File path |
 | `text` | string | (required) | Text to append |
 
+Note: If it is known the file does not already exist, use `editor:create-file` instead for clearer semantic intent.
+
 **Example:**
 
 ````markdown
