@@ -120,6 +120,24 @@ command: |-
 
 Also ensure that shell commands use correct quoting — variable expansions containing paths with spaces should be double-quoted, strings with special characters should be properly escaped, etc. See the "YAML Syntax Safety" section in the clickable actions reference for detailed guidance and examples.
 
+#### Data Variables in Instructions
+
+Workshop instructions should be parameterized using data variables rather than hardcoding session-specific values. Educates provides data variables for the session namespace, ingress domain, session hostname, and many other context-specific values. Use the Hugo `param` shortcode to insert them:
+
+```markdown
+Deploy the application to the `{{< param session_namespace >}}` namespace.
+```
+
+Data variables also work inside clickable actions:
+
+````markdown
+```terminal:execute
+command: kubectl get pods -n {{< param session_namespace >}}
+```
+````
+
+In terminal commands within clickable actions, you can alternatively use the equivalent uppercase environment variable (e.g., `$SESSION_NAMESPACE`) since the terminal shell has these set automatically. Refer to [resources/data-variables-reference.md](resources/data-variables-reference.md) for the complete list of available data variables and which contexts they can be used in.
+
 #### Page Structure
 
 Each page requires YAML frontmatter with at least a `title` property:
@@ -201,6 +219,7 @@ For detailed guidance on specific topics, see:
 - [Images in Workshop Pages](resources/images-in-workshop-pages.md) - How to include images using page bundles and static assets
 - [Clickable Actions Reference](resources/clickable-actions-reference.md) - Index of all clickable action types, YAML syntax safety guidance, and links to category-specific references in [resources/clickable-actions/](resources/clickable-actions/)
 - [Kubernetes Access Reference](resources/kubernetes-access-reference.md) - Namespace isolation, session namespace references, and pod security policies for workshops with Kubernetes access
+- [Data Variables Reference](resources/data-variables-reference.md) - Complete list of data variables for parameterizing workshop instructions, terminal commands, and workshop definitions
 
 ## Skill Version
 
