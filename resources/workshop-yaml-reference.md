@@ -112,6 +112,8 @@ spec:
 
 Replace `{workshop-name}` with the actual workshop name from `metadata.name`.
 
+The `/exercises/**` path is included because the `exercises/` directory receives special treatment: when it exists in the imported workshop files, terminals start with `~/exercises` as the working directory and the VS Code editor opens on it instead of the home directory. See the "exercises Directory" section in the main skill document for details.
+
 **IMPORTANT:**
 - The `$(image_repository)` and `$(workshop_version)` are variables that MUST be used exactly as shown
 - These variables are required for local workshop publishing and deployment workflows

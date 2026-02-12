@@ -57,11 +57,28 @@ Create the following directory structure in the chosen location:
 ```
 <workshop-root>/
 ├── README.md                    # Workshop title and description
+├── exercises/
+│   └── README.md                # Placeholder to ensure directory is preserved
 ├── resources/
 │   └── workshop.yaml            # Educates Workshop definition
 └── workshop/
     └── content/                 # Workshop instruction pages (Markdown)
 ```
+
+#### The exercises Directory
+
+Always create an `exercises/` directory as part of the initial workshop structure. This directory serves as the working area for the workshop user — place any files they will need during the workshop here, such as source code, configuration files, sample data, YAML manifests, templates, or starter projects. By keeping all user-facing files under `exercises/`, the workshop environment stays organized and free of clutter from the home directory.
+
+When this directory exists in the workshop files imported into the workshop session container, Educates treats it specially:
+
+- **Terminal working directory**: Embedded terminals in the workshop dashboard start with `~/exercises` as their current working directory instead of the home directory.
+- **Editor root directory**: The VS Code editor opens on `~/exercises` rather than the home directory, so users only see workshop-relevant files and are not distracted by hidden dot files or other home directory contents.
+
+This special behavior is only triggered if the `exercises/` directory already exists when the workshop session starts. It cannot be created later by workshop instructions — the directory must be part of the published workshop files.
+
+**Important: the directory must contain at least one file.** Empty directories are not preserved when publishing workshop files to a Git repository or OCI image artefact. To ensure the directory is included, add a `README.md` with a brief note such as "Exercise files for this workshop" or a similar placeholder. Avoid using a `.gitkeep` file unless the workshop source is managed in a Git repository where that convention makes sense.
+
+Because the `exercises/` directory is always recommended, workshop instructions should never need to create it. File paths used in clickable actions for files under this directory must use the `~/exercises` prefix (e.g., `~/exercises/deployment.yaml`). The examples in the clickable actions reference files already follow this convention.
 
 ### 5. Generate workshop.yaml
 
