@@ -18,8 +18,6 @@ You can install this skill directly from the GitHub repository using the `npx sk
 npx skills install https://github.com/educates/educates-authoring-skill
 ```
 
-> **Note:** This skill is not currently available on [skills.sh](https://skills.sh), but its listing there will be considered in the future.
-
 ### Installation from .skill file
 
 #### From GitHub Release
