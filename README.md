@@ -15,7 +15,7 @@ A Claude Code skill for creating and configuring workshops for the [Educates](ht
 You can install this skill directly from the GitHub repository using the `npx skills` command:
 
 ```bash
-npx skills install https://github.com/educates/educates-authoring-skill
+npx skills add https://github.com/educates/educates-authoring-skill
 ```
 
 ### Installation from .skill file
