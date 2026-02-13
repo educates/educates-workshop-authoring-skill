@@ -2,7 +2,7 @@
 
 Structured YAML manipulation actions that preserve comments and handle all YAML styles (block, flow, inline). These replace the deprecated `editor:insert-value-into-yaml` action.
 
-YAML paths use dot notation for mapping keys (`spec.template`), bracket notation with integers for sequence indices (`containers[0]`), and bracket notation with key=value for matching sequence items by attribute (`containers[name=nginx]`).
+YAML paths use dot notation for mapping keys (`spec.template`), bracket notation with integers for sequence indices (`containers[0]`), bracket notation with key=value for matching sequence items by attribute (`containers[name=nginx]`), and quoted bracket keys for names with dots or special characters (`metadata["labels"]`, `data["index.html"]`).
 
 ## editor:set-yaml-value
 
