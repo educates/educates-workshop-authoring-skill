@@ -22,7 +22,7 @@ npx skills install https://github.com/educates/educates-authoring-skill
 
 #### From GitHub Release
 
-Pre-packaged `.skill` files are available from the [GitHub releases](https://github.com/educates/educates-authoring-skill/releases) page.
+Pre-packaged `.skill` files are available from the [GitHub releases](https://github.com/educates/educates-authoring-skill/releases) page. This approach is useful when you want to tie your installation to a specific version tag, ensuring reproducibility and consistent behavior across implementations.
 
 To download the latest release:
 
