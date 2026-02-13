@@ -2,6 +2,10 @@
 
 The workshop environment includes a variety of pre-installed command-line tools that workshop users can access without needing to install additional software. This reference documents the available tools and their primary use cases in workshop exercises.
 
+## PATH defaults
+
+Processes started in the workshop environment (including embedded terminals) inherit a PATH that includes standard system locations plus `$HOME/.local/bin` and `$HOME/bin`. These user-level directories may not exist by default. If you place executables in either location, they are found automatically without further configuration.
+
 ## JSON and YAML Processing
 
 ### jq
