@@ -1,4 +1,4 @@
-# Educates Authoring Skill
+# Educates Workshop Authoring Skill
 
 A Claude Code skill for creating and configuring workshops for the [Educates](https://educates.dev/) interactive training platform.
 
@@ -15,25 +15,25 @@ A Claude Code skill for creating and configuring workshops for the [Educates](ht
 You can install this skill directly from the GitHub repository using the `npx skills` command:
 
 ```bash
-npx skills add https://github.com/educates/educates-authoring-skill
+npx skills add https://github.com/educates/educates-workshop-authoring-skill
 ```
 
 ### Installation from .skill file
 
 #### From GitHub Release
 
-Pre-packaged `.skill` files are available from the [GitHub releases](https://github.com/educates/educates-authoring-skill/releases) page. This approach is useful when you want to tie your installation to a specific version tag, ensuring reproducibility and consistent behavior across implementations.
+Pre-packaged `.skill` files are available from the [GitHub releases](https://github.com/educates/educates-workshop-authoring-skill/releases) page. This approach is useful when you want to tie your installation to a specific version tag, ensuring reproducibility and consistent behavior across implementations.
 
 To download the latest release:
 
 ```bash
-curl -fLO https://github.com/educates/educates-authoring-skill/releases/latest/download/educates-authoring.skill
+curl -fLO https://github.com/educates/educates-workshop-authoring-skill/releases/latest/download/educates-workshop-authoring.skill
 ```
 
-To download a specific version (replace `2.0` with the desired version tag):
+To download a specific version (replace `3.0` with the desired version tag):
 
 ```bash
-curl -fLO https://github.com/educates/educates-authoring-skill/releases/download/2.0/educates-authoring.skill
+curl -fLO https://github.com/educates/educates-workshop-authoring-skill/releases/download/3.0/educates-workshop-authoring.skill
 ```
 
 #### From GitHub Source
@@ -41,14 +41,14 @@ curl -fLO https://github.com/educates/educates-authoring-skill/releases/download
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/educates/educates-authoring-skill.git
-   cd educates-authoring-skill
+   git clone https://github.com/educates/educates-workshop-authoring-skill.git
+   cd educates-workshop-authoring-skill
    ```
 
 2. Create an archive of the skill:
 
    ```bash
-   zip -r educates-authoring.skill . -x ".git/*" -x ".github/*"
+   zip -r educates-workshop-authoring.skill . -x ".git/*" -x ".github/*"
    ```
 
 #### Importing into Claude
@@ -56,7 +56,7 @@ curl -fLO https://github.com/educates/educates-authoring-skill/releases/download
 Once you have the `.skill` file, either downloaded from a GitHub release or built from source, install it using the Claude Code CLI:
 
 ```bash
-claude skill install educates-authoring.skill
+claude skill install educates-workshop-authoring.skill
 ```
 
 Or in the Claude Code desktop app, go to **Settings > Skills** and use "Install from file" to select the `.skill` file.
@@ -66,7 +66,7 @@ Or in the Claude Code desktop app, go to **Settings > Skills** and use "Install 
 Once installed, if using Claude invoke the skill with:
 
 ```
-/educates-authoring
+/educates-workshop-authoring
 ```
 
 Or simply ask Claude to help create an Educates workshop and it will use the skill automatically based on context.
@@ -83,7 +83,7 @@ Although this skill is being developed and tested with Claude, the skills format
 
 ## Feedback
 
-This skill is continually being improved, and your feedback helps make it better. If you notice areas where the generated workshops could be improved, or where the skill seems to lack knowledge about how Educates environments work and what they provide, please open an issue on the [GitHub issue tracker](https://github.com/educates/educates-authoring-skill/issues).
+This skill is continually being improved, and your feedback helps make it better. If you notice areas where the generated workshops could be improved, or where the skill seems to lack knowledge about how Educates environments work and what they provide, please open an issue on the [GitHub issue tracker](https://github.com/educates/educates-workshop-authoring-skill/issues).
 
 Examples of useful feedback include:
 
