@@ -271,6 +271,7 @@ For detailed guidance on specific topics, see:
 - [Data Variables Reference](resources/data-variables-reference.md) - Complete list of data variables for parameterizing workshop instructions, terminal commands, and workshop definitions
 - [Workshop Image Reference](resources/workshop-image-reference.md) - Container image selection for workshops, including pre-built JDK and Conda images
 - [Java Language Reference](resources/java-language-reference.md) - JDK image selection, Maven/Gradle build commands, project layout, and Spring Boot patterns for Java workshops
+- [Python Language Reference](resources/python-language-reference.md) - Python version management, uv/pip package installation, project layout, and web framework patterns for Python workshops
 - [Workshop Setup Reference](resources/workshop-setup-reference.md) - Setup scripts, environment variables, background services, and terminal customization for the workshop container
 
 ## Skill Version
