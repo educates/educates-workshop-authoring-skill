@@ -20,6 +20,7 @@ spec:
   publish:                              # spec.publish (REQUIRED)
     image: ""                           # spec.publish.image
   workshop:                             # spec.workshop (REQUIRED)
+    image: ""                           # spec.workshop.image (optional, defaults to base-environment)
     files: []                           # spec.workshop.files
   session:                              # spec.session
     namespaces:                         # spec.session.namespaces
@@ -40,6 +41,10 @@ spec:
       registry:                         # spec.session.applications.registry
         enabled: true
       vcluster:                         # spec.session.applications.vcluster
+        enabled: true
+      examiner:                          # spec.session.applications.examiner
+        enabled: true
+      files:                             # spec.session.applications.files
         enabled: true
     ingresses: []                       # spec.session.ingresses
     dashboards: []                      # spec.session.dashboards
@@ -211,6 +216,34 @@ applications:
 ```
 
 - **When to enable**: Workshops requiring cluster-admin operations or isolated Kubernetes environments
+
+### Examiner
+
+For running verification tests that check user progress:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  examiner:
+    enabled: true
+```
+
+- **When to enable**: Workshops that include verification steps where users click to check whether they completed a task correctly
+- See [clickable-actions/examiner-actions.md](clickable-actions/examiner-actions.md) for how to write test scripts and use the `examiner:execute-test` clickable action
+
+### File Downloads and Uploads
+
+For allowing users to download files from or upload files to the workshop session:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  files:
+    enabled: true
+```
+
+- **When to enable**: Workshops where users need to download generated files (e.g., kubeconfig, certificates) to their local machine or upload files from their local machine into the session
+- See [clickable-actions/file-transfer-actions.md](clickable-actions/file-transfer-actions.md) for the `files:download-file`, `files:copy-file`, `files:upload-file`, and `files:upload-files` clickable actions
 
 ## Kubernetes Access
 

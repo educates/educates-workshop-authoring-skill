@@ -24,11 +24,11 @@ Deploy the application to the `{{< param session_namespace >}}` namespace.
 
 Use the `SESSION_NAMESPACE` environment variable, which is available in the workshop terminal:
 
-```markdown
+````markdown
 ```terminal:execute
 command: kubectl get pods -n $SESSION_NAMESPACE
-```​
 ```
+````
 
 **IMPORTANT:** Because the session namespace is already the default context in kubeconfig, specifying `-n $SESSION_NAMESPACE` is only necessary when you want to be explicit in the instructions. For most `kubectl` commands, omitting the namespace flag will work correctly.
 
@@ -42,11 +42,11 @@ To reach a Service named `app` in the session namespace, use the format `app.<na
 
 **In terminal commands:**
 
-```markdown
+````markdown
 ```terminal:execute
 command: curl http://app.$SESSION_NAMESPACE.svc:8080
-```​
 ```
+````
 
 **In workshop markdown (to show the expanded hostname):**
 
@@ -58,11 +58,11 @@ If the fully qualified domain name is needed, append the cluster domain. Educate
 
 **In terminal commands:**
 
-```markdown
+````markdown
 ```terminal:execute
 command: curl http://app.$SESSION_NAMESPACE.svc.$CLUSTER_DOMAIN:8080
-```​
 ```
+````
 
 **In workshop markdown:**
 
@@ -86,7 +86,7 @@ The convention is to prefix the session hostname with the application or service
 
 **In workshop markdown (e.g., showing an Ingress resource to apply):**
 
-```markdown
+````markdown
 ```editor:append-lines-to-file
 file: ~/exercises/ingress.yaml
 text: |
@@ -106,8 +106,8 @@ text: |
               name: app
               port:
                 number: 8080
-```​
 ```
+````
 
 **In `spec.session.objects` of the workshop definition (`resources/workshop.yaml`):**
 

@@ -26,6 +26,8 @@ workshop/
 
 To run a script when the container starts — for example, to install tools, pre-create resource files, or perform one-time initialization — add an executable shell script to the `workshop/setup.d` directory. The script must have a `.sh` suffix to be recognised and run.
 
+Scripts are executed in alphabetical order by filename. Use numeric prefixes to control ordering when one script depends on another (e.g., `01-install-tools.sh`, `02-setup-data.sh`).
+
 Setup scripts run with the workshop user home directory as the current working directory.
 
 ### Idempotency Requirement

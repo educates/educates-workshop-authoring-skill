@@ -26,11 +26,11 @@ url: {{< param ingress_protocol >}}://app-{{< param session_hostname >}}
 
 Most data variables are available as uppercase environment variables in the workshop terminal:
 
-```markdown
+````markdown
 ```terminal:execute
 command: echo $SESSION_NAMESPACE
-```​
 ```
+````
 
 ### In the Workshop Definition
 

@@ -36,7 +36,7 @@ Use these actions to guide the learner's eye to the relevant parts of the code b
 
 Learners execute code and commands via `terminal:execute` clickable actions in the workshop instructions. They do not type commands into the terminal themselves.
 
-When a command produces output that the instructions will discuss, tell the learner what to expect before or after the action so they know what to look for. When the output appears in a dashboard tab other than the terminal (e.g., a web application accessed through the session proxy), include a `dashboard:open-dashboard` or `dashboard:reload-dashboard` action to switch the learner to the correct tab.
+When a command produces output that the instructions will discuss, tell the learner what to expect before or after the action so they know what to look for. When the output appears in a dashboard tab other than the terminal (e.g., a web application accessed through the session proxy), include a `dashboard:open-dashboard` or `dashboard:reload-dashboard` action to switch the learner to the correct tab. See [workshop-dashboard-reference.md](workshop-dashboard-reference.md) for detailed patterns on managing tab visibility.
 
 ### Modifying Code
 

@@ -18,7 +18,7 @@ Collect the following information from the user or infer from context:
 
 - **Title**: A short, human-readable title for the workshop
 - **Description**: A one to two sentence description of what the workshop covers
-- **Name**: A machine-readable identifier (lowercase, dashes allowed, max 25 characters, should start with `lab-` prefix)
+- **Name**: A machine-readable identifier (lowercase, dashes allowed, max 25 characters, recommended `lab-` prefix)
 
 If the user provides a topic but not explicit values, propose reasonable defaults and confirm before proceeding.
 
@@ -114,8 +114,8 @@ spec:
 - Set `spec.difficulty` to one of: `beginner`, `intermediate`, `advanced`, `extreme`
 - Always include terminal with `enabled: true` and `layout: split`
 - Enable only the additional session applications the workshop requires
-- Set `security.token.enabled: false` by default (it is enabled by default for historical reasons)
-- Only set `security.token.enabled: true` if the workshop needs kubectl or uses the Kubernetes console
+- Set `spec.session.namespaces.security.token.enabled` to `false` by default (it is enabled by default for historical reasons)
+- Only set `spec.session.namespaces.security.token.enabled` to `true` if the workshop needs kubectl or uses the Kubernetes console
 - Omit any applications that are not needed (do not include with `enabled: false`)
 
 ### 6. Create Workshop Instructions

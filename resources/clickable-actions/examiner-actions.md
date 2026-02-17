@@ -1,6 +1,6 @@
 # Examiner Clickable Actions
 
-Actions for running verification tests to check whether a workshop user has completed required steps. The test examiner must be enabled in the workshop configuration.
+Actions for running verification tests to check whether a workshop user has completed required steps. The examiner must be enabled in the workshop configuration by setting `spec.session.applications.examiner.enabled: true` in `resources/workshop.yaml`. See [workshop-yaml-reference.md](../workshop-yaml-reference.md) for the full workshop definition structure.
 
 ## examiner:execute-test
 

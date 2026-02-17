@@ -90,7 +90,7 @@ Reloads an existing dashboard tab. If the dashboard does not exist, it will be c
 ````markdown
 ```dashboard:reload-dashboard
 name: App Preview
-url: https://myapp-{{< param session_name >}}.{{< param ingress_domain >}}
+url: {{< param ingress_protocol >}}://myapp-{{< param session_hostname >}}
 ```
 ````
 

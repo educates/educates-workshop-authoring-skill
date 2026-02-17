@@ -188,7 +188,7 @@ These provide structured YAML manipulation that preserves comments and handles a
 
 For details see [clickable-actions/editor-terminal-actions.md](clickable-actions/editor-terminal-actions.md).
 
-These manage terminals within the VS Code editor, separate from dashboard terminals.
+These manage terminals within the VS Code editor, separate from dashboard terminals. Editor terminals use named string sessions (e.g., `"educates"`, `"build"`) rather than the integer session numbers used by dashboard `terminal:*` actions.
 
 | Action Type | Purpose |
 |-------------|---------|
@@ -251,11 +251,27 @@ Require the test examiner to be enabled in the workshop configuration.
 | `workshop:copy` | Copy text to the system clipboard |
 | `workshop:copy-and-edit` | Copy text to clipboard, visually flagged as needing editing |
 
-**Example:**
+Both actions accept a single property:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `text` | string | (required) | The text to copy to the clipboard |
+
+Use `workshop:copy` when the text can be pasted verbatim. Use `workshop:copy-and-edit` when the text contains a placeholder the learner must customize before pasting (e.g., a username or personal token). The `copy-and-edit` variant renders with a visual indicator reminding the learner to edit the value.
+
+**Example — verbatim copy:**
 
 ````markdown
 ```workshop:copy
-text: export MY_VAR=change-this-value
+text: export MY_VAR=some-fixed-value
+```
+````
+
+**Example — copy with editing required:**
+
+````markdown
+```workshop:copy-and-edit
+text: export MY_TOKEN=replace-with-your-token
 ```
 ````
 

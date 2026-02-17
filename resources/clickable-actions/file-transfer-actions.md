@@ -1,6 +1,6 @@
 # File Transfer Clickable Actions
 
-Actions for downloading files from and uploading files to the workshop session. These require the respective file download or upload features to be enabled in the workshop configuration.
+Actions for downloading files from and uploading files to the workshop session. File transfers must be enabled in the workshop configuration by setting `spec.session.applications.files.enabled: true` in `resources/workshop.yaml`. See [workshop-yaml-reference.md](../workshop-yaml-reference.md) for the full workshop definition structure.
 
 ## files:download-file
 
