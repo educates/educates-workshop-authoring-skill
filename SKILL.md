@@ -104,7 +104,7 @@ spec:
       - /README.md
 ```
 
-**IMPORTANT:** Do NOT use `spec.content.files` — this is a deprecated format. Always use `spec.publish` and `spec.workshop.files` as shown above. The `$(image_repository)` and `$(workshop_version)` variables must be used exactly as shown to support local workshop publishing and deployment workflows.
+**IMPORTANT:** Do NOT use `spec.content.files` — this is a deprecated format. Always use `spec.publish` and `spec.workshop.files` as shown above. The `$(image_repository)` and `$(workshop_version)` variables must be used exactly as shown to support local workshop publishing and deployment workflows. The `spec.workshop.files` array also supports Git and HTTP sources and can contain multiple entries overlaid in order — see the "Alternative File Sources" section in the workshop YAML reference for details.
 
 **Additional configuration:**
 
@@ -207,6 +207,7 @@ Content for the second section...
 - Do NOT use a level 1 heading (`#`) — the `title` in frontmatter automatically generates the page header
 - Begin immediately with an introductory paragraph after the frontmatter
 - Use level 2 headings (`##`) and below for any additional sections
+- **Use admonition shortcodes** to highlight important information: `{{< note >}}` for tips, `{{< warning >}}` for cautions, and `{{< danger >}}` for critical warnings. See [resources/hugo-shortcodes-reference.md](resources/hugo-shortcodes-reference.md) for syntax and usage guidance.
 - **Focus on the workshop topic, not the platform.** Workshop instructions should teach the subject matter, not how Educates works. When the workshop requires platform-specific configuration (e.g., setting up a session proxy for accessing a deployed service, configuring ingresses, or using data variables), present these as natural steps of the exercise without drawing attention to Educates internals. Do not say things like "we will learn how Educates is configured" or "this is how Educates handles ingress" — unless the workshop is specifically about using the Educates platform itself. The overview, summary, and learning objectives should describe what users will learn about the topic, not about the workshop infrastructure supporting it.
 
 #### File Naming Convention
@@ -299,6 +300,8 @@ For detailed guidance on specific topics, see:
 - [Java Language Reference](resources/java-language-reference.md) - JDK image selection, Maven/Gradle build commands, project layout, and Spring Boot patterns for Java workshops
 - [Python Language Reference](resources/python-language-reference.md) - Python version management, uv/pip package installation, project layout, and web framework patterns for Python workshops
 - [Workshop Setup Reference](resources/workshop-setup-reference.md) - Setup scripts, environment variables, background services, and terminal customization for the workshop container
+- [Hugo Shortcodes Reference](resources/hugo-shortcodes-reference.md) - Admonition callouts (note, warning, danger), pathway conditional rendering, and custom shortcodes for workshop instructions
+- [Session Objects Reference](resources/session-objects-reference.md) - Pre-creating Kubernetes resources per session, shared environment objects, request objects, and workshop container resource configuration
 
 ## Skill Version
 

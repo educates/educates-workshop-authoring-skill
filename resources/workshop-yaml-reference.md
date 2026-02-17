@@ -46,8 +46,16 @@ spec:
         enabled: true
       files:                             # spec.session.applications.files
         enabled: true
+    objects: []                         # spec.session.objects
+    resources:                          # spec.session.resources
+      memory: ""                        # spec.session.resources.memory
+      storage: ""                       # spec.session.resources.storage
     ingresses: []                       # spec.session.ingresses
     dashboards: []                      # spec.session.dashboards
+  environment:                          # spec.environment
+    objects: []                         # spec.environment.objects
+  request:                              # spec.request
+    objects: []                         # spec.request.objects
 ```
 
 **Note:** Snippets throughout this document show partial YAML. Each snippet includes a path comment indicating where it belongs in the overall structure.
@@ -124,6 +132,66 @@ The `/exercises/**` path is included because the `exercises/` directory receives
 - The `$(image_repository)` and `$(workshop_version)` are variables that MUST be used exactly as shown
 - These variables are required for local workshop publishing and deployment workflows
 - **NEVER use `spec.content.files`** — this is a deprecated format and must not be used
+
+### Alternative File Sources
+
+The primary source for workshop files is an OCI image (shown above), which is the standard for published workshops. The `spec.workshop.files` array also supports Git repository and HTTP sources, and can contain multiple entries that are overlaid in order.
+
+**Git repository source:**
+
+```yaml
+spec:
+  workshop:
+    files:
+    - git:
+        url: https://github.com/organization/repository
+        ref: origin/main
+      includePaths:
+      - /workshop/**
+      - /exercises/**
+      - /README.md
+```
+
+**HTTP archive source:**
+
+```yaml
+spec:
+  workshop:
+    files:
+    - http:
+        url: https://example.com/workshop-content.tar.gz
+      includePaths:
+      - /workshop/**
+```
+
+**Multiple sources (overlay):**
+
+When the `files` array contains multiple entries, files are downloaded and overlaid in array order — later entries overwrite files from earlier ones at the same path. This is useful for composing a workshop from a base set of files plus customizations:
+
+```yaml
+spec:
+  workshop:
+    files:
+    - image:
+        url: "$(image_repository)/base-content:$(workshop_version)"
+      includePaths:
+      - /exercises/**
+    - image:
+        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+      includePaths:
+      - /workshop/**
+      - /README.md
+```
+
+**Common options for all source types:**
+
+| Option | Description |
+|--------|-------------|
+| `includePaths` | Array of glob patterns for files to include |
+| `excludePaths` | Array of glob patterns for files to exclude |
+| `newRootPath` | Directory within the source to use as the root (strip a prefix) |
+
+For most workshops, the standard single OCI image source shown at the top of this section is sufficient.
 
 ## Session Applications
 
@@ -386,6 +454,19 @@ name: App
 **Why use session ingresses instead of direct URLs?** The session proxy provides automatic HTTPS when Educates is deployed with secure ingress, avoids mixed-content errors when embedding in iframes, and gates access through the same authentication as the workshop dashboard.
 
 **IMPORTANT:** If you define a session ingress with a `name` of `app`, you cannot also have the user create a separate Kubernetes Ingress using a hostname of `app-$(session_hostname)`. The session proxy has already claimed that hostname.
+
+## Pre-created Resources and Container Configuration
+
+Educates can automatically create Kubernetes resources when a session starts and configure the workshop container's own resource limits. For detailed guidance, examples, and all available options, see [session-objects-reference.md](session-objects-reference.md).
+
+**Summary of available sections:**
+
+| Configuration | Purpose |
+|---------------|---------|
+| `spec.session.objects` | Kubernetes resources created per session (Deployments, Services, ConfigMaps, etc.) |
+| `spec.environment.objects` | Shared resources created once per workshop environment |
+| `spec.request.objects` | Resources created when a session is assigned to a user (has access to user identity) |
+| `spec.session.resources` | Workshop container memory and storage configuration |
 
 ## Decision Flowchart
 

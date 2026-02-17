@@ -109,7 +109,7 @@ text: |
 ```
 ````
 
-**In `spec.session.objects` of the workshop definition (`resources/workshop.yaml`):**
+**In `spec.session.objects` of the workshop definition (`resources/workshop.yaml`).** Session objects are Kubernetes resources pre-created automatically when a session starts. See [session-objects-reference.md](session-objects-reference.md) for full documentation:
 
 ```yaml
 # Path: spec.session
