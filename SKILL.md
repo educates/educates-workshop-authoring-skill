@@ -148,6 +148,14 @@ Getting this wrong leads to commands that reference incorrect file paths. Either
 
 When the workshop uses the split terminal layout (two terminals), track the working directory of each terminal independently — a `cd` in one terminal does not affect the other.
 
+#### Dashboard Tab Visibility
+
+The workshop dashboard shows only one tab at a time on the right-hand side of the screen (the left side displays the workshop instructions). The Terminal tab is visible by default when a session starts. Users switch between tabs by clicking on tab headers or through `dashboard:open-dashboard` clickable actions.
+
+This matters when writing instructions because certain actions implicitly change which tab is visible. A `terminal:execute` action switches to the Terminal tab, hiding any other tab (such as a web application dashboard) the user was viewing. If the workshop uses a custom dashboard tab (e.g., for a web app accessed via the session proxy), you must explicitly guide the user back to that tab after running terminal commands so they can see the result.
+
+Refer to [resources/workshop-dashboard-reference.md](resources/workshop-dashboard-reference.md) for detailed patterns and examples for handling tab switching in workshop instructions.
+
 #### Data Variables in Instructions
 
 Workshop instructions should be parameterized using data variables rather than hardcoding session-specific values. Educates provides data variables for the session namespace, ingress domain, session hostname, and many other context-specific values. Use the Hugo `param` shortcode to insert them:
@@ -254,6 +262,10 @@ After generating workshop instruction pages, verify the following:
 - [ ] File paths in `editor` clickable actions use the `~/exercises` prefix where appropriate
 - [ ] File paths referenced in prose match the paths used in clickable actions
 
+**Dashboard tab visibility:**
+- [ ] After any `terminal:execute` action that follows a step where the user was viewing a non-terminal dashboard tab (e.g., a web application), the instructions guide the user back to the correct tab using `dashboard:open-dashboard` or `dashboard:reload-dashboard`
+- [ ] The visible dashboard tab is tracked throughout the instructions, just as the terminal working directory is tracked
+
 **Content focus:**
 - [ ] Workshop overview and summary describe the subject matter, not the Educates platform
 - [ ] Learning objectives focus on what the user will learn about the topic
@@ -269,6 +281,7 @@ For detailed guidance on specific topics, see:
 - [Workshop Tools Reference](resources/workshop-tools-reference.md) - Command-line tools available in the workshop environment, including utilities for JSON/YAML processing, Kubernetes management, container handling, and load testing
 - [Kubernetes Access Reference](resources/kubernetes-access-reference.md) - Namespace isolation, session namespace references, and pod security policies for workshops with Kubernetes access
 - [Data Variables Reference](resources/data-variables-reference.md) - Complete list of data variables for parameterizing workshop instructions, terminal commands, and workshop definitions
+- [Workshop Dashboard Reference](resources/workshop-dashboard-reference.md) - Dashboard layout, single-tab visibility behavior, and patterns for guiding users between tabs in workshop instructions
 - [Workshop Image Reference](resources/workshop-image-reference.md) - Container image selection for workshops, including pre-built JDK and Conda images
 - [Java Language Reference](resources/java-language-reference.md) - JDK image selection, Maven/Gradle build commands, project layout, and Spring Boot patterns for Java workshops
 - [Python Language Reference](resources/python-language-reference.md) - Python version management, uv/pip package installation, project layout, and web framework patterns for Python workshops

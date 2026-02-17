@@ -2,6 +2,8 @@
 
 Actions for controlling the workshop dashboard, opening URLs, and managing dashboard tabs.
 
+For background on the dashboard layout (instructions on the left, a single visible tab on the right) and guidance on writing instructions that account for tab switching, see [Workshop Dashboard Reference](../workshop-dashboard-reference.md).
+
 ## dashboard:open-url
 
 Opens a URL in a new browser tab or window.
