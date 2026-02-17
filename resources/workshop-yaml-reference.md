@@ -38,10 +38,37 @@ spec:
         enabled: true
       docker:                           # spec.session.applications.docker
         enabled: true
+        storage: ""                     # spec.session.applications.docker.storage (default 5Gi)
+        memory: ""                      # spec.session.applications.docker.memory (default 768Mi)
+        socket:                         # spec.session.applications.docker.socket
+          enabled: true
+        compose:                        # spec.session.applications.docker.compose
+          services: {}
       registry:                         # spec.session.applications.registry
         enabled: true
+        storage: ""                     # spec.session.applications.registry.storage (default 5Gi)
+        memory: ""                      # spec.session.applications.registry.memory (default 768Mi)
       vcluster:                         # spec.session.applications.vcluster
         enabled: true
+        version: ""                     # spec.session.applications.vcluster.version
+        resources:                      # spec.session.applications.vcluster.resources
+          syncer:
+            memory: ""
+        ingress:                        # spec.session.applications.vcluster.ingress
+          enabled: true
+          subdomains: []
+        objects: []                     # spec.session.applications.vcluster.objects
+        services:                       # spec.session.applications.vcluster.services
+          fromVirtual: []
+          fromHost: []
+      git:                              # spec.session.applications.git
+        enabled: true
+      slides:                           # spec.session.applications.slides
+        enabled: true
+        reveal.js:                      # spec.session.applications.slides.reveal.js
+          version: ""
+        impress.js:                     # spec.session.applications.slides.impress.js
+          version: ""
       examiner:                          # spec.session.applications.examiner
         enabled: true
       files:                             # spec.session.applications.files
@@ -248,7 +275,7 @@ applications:
 
 ### Docker Daemon
 
-For building and running containers:
+For building and running containers. Each workshop session gets its own docker daemon running as a sidecar container.
 
 ```yaml
 # Path: spec.session.applications
@@ -258,10 +285,69 @@ applications:
 ```
 
 - **When to enable**: Workshops involving container building, Docker commands, or container runtime exercises
+- **Security**: Requires a privileged container for the docker daemon. For workshops with untrusted users, host them in a disposable Kubernetes cluster that is destroyed after the workshop.
+
+**Storage and memory:**
+
+The docker daemon mounts a persistent volume for storing pulled and built images. Defaults are 5Gi storage and 768Mi memory:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  docker:
+    enabled: true
+    storage: 20Gi
+    memory: 1Gi
+```
+
+**Docker Compose services:**
+
+To auto-start services when the workshop session begins, provide `docker compose` compatible configuration under `compose.services`. Ports must be explicitly exposed to `127.0.0.1` to be accessible from the workshop container:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  docker:
+    enabled: true
+    compose:
+      services:
+        grafana-workshop:
+          image: grafana/grafana:7.1.3
+          ports:
+          - "127.0.0.1:3000:3000"
+          environment:
+          - GF_AUTH_ANONYMOUS_ENABLED=true
+```
+
+If a compose service needs access to workshop files, mount the `workshop` named volume:
+
+```yaml
+# Path: spec.session.applications.docker.compose.services
+        my-service:
+          volumes:
+          - type: volume
+            source: workshop
+            target: /mnt
+```
+
+**Socket control:**
+
+When compose services are defined, the docker socket is **not** exposed to the workshop container by default. To re-enable it (e.g., so users can run `docker` commands alongside compose services):
+
+```yaml
+# Path: spec.session.applications
+applications:
+  docker:
+    enabled: true
+    socket:
+      enabled: true
+```
+
+Tools that need the socket location programmatically should use the `DOCKER_HOST` environment variable available in the workshop terminal.
 
 ### Image Registry
 
-For pushing/pulling container images:
+A separate per-session container image registry for pushing and pulling images built during the workshop using tools such as `docker build`, `kpack`, or `kaniko`.
 
 ```yaml
 # Path: spec.session.applications
@@ -271,10 +357,31 @@ applications:
 ```
 
 - **When to enable**: Workshops where users need to push images to a registry (often paired with Docker)
+- **Secure ingress required**: The registry is only fully usable when Educates is deployed with secure ingress, since an insecure registry would not be trusted by the Kubernetes cluster for deployments.
+
+**Storage and memory:**
+
+The registry mounts a persistent volume for storing images. Defaults are 5Gi storage and 768Mi memory:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  registry:
+    enabled: true
+    storage: 20Gi
+    memory: 1Gi
+```
+
+**Automatic credential injection:**
+
+- `$HOME/.docker/config.json` is injected into the workshop session so tools like `docker` authenticate automatically.
+- A Kubernetes secret of type `kubernetes.io/dockerconfigjson` is created in the session namespace and applied to the `default` service account, so deployments using the default service account can pull images without additional configuration.
+
+**Data variables:** When the registry is enabled, variables such as `registry_host`, `registry_username`, `registry_password`, `registry_auth_token`, `registry_secret`, and `registry_auth_file` become available. See the [Data Variables Reference](data-variables-reference.md) for the full list.
 
 ### Virtual Cluster (vcluster)
 
-For isolated Kubernetes environments:
+Provisions a virtual cluster giving the workshop user the appearance of a full Kubernetes cluster with cluster-admin access, running inside the session namespace of the host cluster.
 
 ```yaml
 # Path: spec.session.applications
@@ -283,7 +390,103 @@ applications:
     enabled: true
 ```
 
-- **When to enable**: Workshops requiring cluster-admin operations or isolated Kubernetes environments
+- **When to enable**: Workshops requiring cluster-admin operations, installing operators, creating namespaces, or other actions that need elevated Kubernetes privileges
+
+**Kubernetes version:**
+
+The virtual cluster defaults to the latest supported Kubernetes version. To pin a specific version:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  vcluster:
+    enabled: true
+    version: "1.27"
+```
+
+**Security policy:**
+
+The default security policy for workloads in the virtual cluster is `baseline` (allows running as root, binding system ports, etc.). To restrict it:
+
+```yaml
+# Path: spec.session
+session:
+  namespaces:
+    security:
+      policy: restricted
+```
+
+**Resource budget and syncer memory:**
+
+Resource quotas and limit ranges from the session namespace budget apply to the virtual cluster. The budget must accommodate CoreDNS which is always deployed in the virtual cluster. Virtual cluster control plane services run in a separate namespace and default to 1Gi memory for the syncer. To override:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  vcluster:
+    enabled: true
+    resources:
+      syncer:
+        memory: 768Mi
+```
+
+**Ingress:**
+
+Ingress resources created in the virtual cluster are automatically synced to the host cluster. For advanced features, enable the Contour ingress controller:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  vcluster:
+    enabled: true
+    ingress:
+      enabled: true
+      subdomains:
+      - default
+```
+
+Ingress hostnames must be within `$(session_name).$(ingress_domain)` or `{subdomain}.$(session_name).$(ingress_domain)`.
+
+**Deploying resources into the virtual cluster:**
+
+Use `vcluster.objects` to deploy resources into the virtual cluster at session creation. Namespaced resources must include `namespace`. Session variables are substituted:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  vcluster:
+    enabled: true
+    objects:
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: session-details
+        namespace: default
+      data:
+        INGRESS_DOMAIN: "$(ingress_domain)"
+```
+
+For more complex deployments (e.g., installing kapp-controller or operators), add `App` resources to `session.objects` targeting the `$(vcluster_namespace)` namespace with `$(vcluster_secret)` for kubeconfig access.
+
+**Service mapping:**
+
+Map services between the virtual cluster and the host cluster:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  vcluster:
+    enabled: true
+    services:
+      fromVirtual:
+      - from: my-virtual-namespace/my-virtual-service
+        to: my-host-service
+      fromHost:
+      - from: $(workshop_namespace)/my-host-service
+        to: my-virtual-namespace/my-virtual-service
+```
+
+**Data variables:** `vcluster_namespace` (namespace of the virtual cluster control plane) and `vcluster_secret` (name of the kubeconfig secret) are available as session data variables. See the [Data Variables Reference](data-variables-reference.md).
 
 ### Examiner
 
@@ -312,6 +515,104 @@ applications:
 
 - **When to enable**: Workshops where users need to download generated files (e.g., kubeconfig, certificates) to their local machine or upload files from their local machine into the session
 - See [clickable-actions/file-transfer-actions.md](clickable-actions/file-transfer-actions.md) for the `files:download-file`, `files:copy-file`, `files:upload-file`, and `files:upload-files` clickable actions
+
+### Git Server
+
+A local Git server hosted from the workshop container. Each session gets its own Git server instance with unique credentials, automatically deleted when the session terminates.
+
+```yaml
+# Path: spec.session.applications
+applications:
+  git:
+    enabled: true
+```
+
+- **When to enable**: Workshops involving CI/CD pipelines, source code modification and push, or any scenario where users need their own Git repository without requiring accounts on hosted services like GitHub or GitLab
+
+**How it works:**
+
+The Git server supports any number of repositories. For use in the terminal, the following environment variables are set: `GIT_PROTOCOL`, `GIT_HOST`, `GIT_USERNAME`, `GIT_PASSWORD`. In workshop instructions the same variable names in lower case can be used as data variables.
+
+Git credentials are pre-configured in the workshop user account, so `git clone` and `git push` work without supplying credentials. Users only need the credentials when configuring external systems (e.g., adding them to a CI/CD pipeline).
+
+**Cloning and pushing:**
+
+```bash
+git clone $GIT_PROTOCOL://$GIT_HOST/project.git
+cd project
+# make changes
+git add . && git commit -m "Changes" && git push
+```
+
+**Pre-creating repositories from setup scripts:**
+
+Repositories can be pre-created from a `setup.d` script. When cloning from a remote server, the `--bare` flag is required because only the bare repository (normally inside `.git`) is needed:
+
+```bash
+#!/bin/bash
+set -eo pipefail
+cd /opt/git/repositories
+git clone --bare https://github.com/example/project.git
+```
+
+**Webhook hooks:**
+
+To fire a webhook when changes are pushed, provide an executable `post-receive` hook script in the `hooks` directory of the bare repository under `/opt/git/repositories`.
+
+**Data variables:** See the [Data Variables Reference](data-variables-reference.md) for `git_protocol`, `git_host`, `git_username`, and `git_password`.
+
+### Presentation Slides
+
+Serves static slide content from the `workshop/slides/` directory via a built-in HTTP server and automatically creates a dashboard tab for the slides.
+
+```yaml
+# Path: spec.session.applications
+applications:
+  slides:
+    enabled: true
+```
+
+- **When to enable**: Workshops that include a presentation alongside the hands-on instructions
+
+**How it works:**
+
+Place slide files in the `workshop/slides/` directory. The default web page must be `index.html`. Anything in the directory is served as static files.
+
+**reveal.js support:**
+
+Static assets for reveal.js versions 3.X and 4.X are bundled. Specify the version to use:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  slides:
+    enabled: true
+    reveal.js:
+      version: "4.X"
+```
+
+The version can be an exact version or a semver-style range selector.
+
+**impress.js support:**
+
+Static assets for impress.js version 1.X are bundled:
+
+```yaml
+# Path: spec.session.applications
+applications:
+  slides:
+    enabled: true
+    impress.js:
+      version: "1.X"
+```
+
+**PDF slides:**
+
+For PDF-based slides, add the PDF file to `workshop/slides/` and create an `index.html` that embeds the PDF.
+
+**Linking to specific slides:**
+
+If using reveal.js with history enabled or section IDs, link to a specific slide from workshop instructions using `/slides/#/section-name`. When the workshop content is displayed in the dashboard, slide links open in the slides tab rather than a separate browser window.
 
 ## Kubernetes Access
 
@@ -479,3 +780,5 @@ When generating a workshop.yaml, determine:
 5. **Does it teach Kubernetes?** → Enable console (and keep security token enabled)
 6. **Does it involve containers?** → Enable docker and possibly registry
 7. **Does it need cluster-admin access?** → Enable vcluster
+8. **Does it need a local Git repository?** → Enable git (e.g., for CI/CD pipeline workshops)
+9. **Does it include a presentation?** → Enable slides and add content to `workshop/slides/`

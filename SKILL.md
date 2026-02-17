@@ -47,6 +47,8 @@ Ask the user about additional session applications based on the workshop's techn
 - **Docker**: Will users build or run containers?
 - **Image registry**: Will users push container images?
 - **Virtual cluster**: Does the workshop need cluster-admin operations?
+- **Git server**: Will users need a local Git repository (e.g., for CI/CD pipelines)?
+- **Slides**: Does the workshop include a presentation alongside the instructions?
 
 Infer sensible defaults from the workshop topic. For example, a Kubernetes workshop likely needs editor, Kubernetes access, and console enabled.
 

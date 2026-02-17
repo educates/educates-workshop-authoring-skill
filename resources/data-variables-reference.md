@@ -144,4 +144,30 @@ When the image registry is enabled (`spec.session.applications.registry.enabled:
 
 The registry URL uses the same HTTP protocol scheme as the workshop sessions, inherited from `ingress_protocol`.
 
-Other session applications may provide additional data variables when enabled. These are documented in the Educates documentation sections for the specific application features.
+### Git Server Variables
+
+When the local Git server is enabled (`spec.session.applications.git.enabled: true`), the following additional variables are available as data variables in workshop instructions and as environment variables in the terminal:
+
+| Variable | Terminal env var | Description |
+|----------|-----------------|-------------|
+| `git_protocol` | `GIT_PROTOCOL` | Protocol used to access the Git server (`http` or `https`) |
+| `git_host` | `GIT_HOST` | Full hostname for accessing the Git server |
+| `git_username` | `GIT_USERNAME` | Username for accessing the Git server |
+| `git_password` | `GIT_PASSWORD` | Password for the user account on the Git server |
+
+Git credentials are pre-configured in the workshop user's git config, so `git clone` and `git push` work without supplying credentials. Users only need the explicit credentials when configuring external systems such as CI/CD pipeline webhook integrations.
+
+### Virtual Cluster Variables
+
+When a virtual cluster is enabled (`spec.session.applications.vcluster.enabled: true`), the following additional variables are available as session data variables in the workshop definition:
+
+| Variable | Description |
+|----------|-------------|
+| `vcluster_namespace` | Namespace where the virtual cluster control plane processes run. Used when deploying kapp-controller `App` resources via `session.objects`. Also available in workshop instructions. |
+| `vcluster_secret` | Name of the Kubernetes secret in the `vcluster_namespace` containing the kubeconfig for accessing the virtual cluster |
+
+These are primarily used in the workshop definition (`$(vcluster_namespace)`, `$(vcluster_secret)`) when configuring `session.objects` to install packages into the virtual cluster.
+
+### Docker Variables
+
+When Docker is enabled (`spec.session.applications.docker.enabled: true`), the `DOCKER_HOST` environment variable is available in the workshop terminal, pointing to the docker daemon socket. Tools that need to access the docker socket programmatically should use this variable rather than assuming a default path.
