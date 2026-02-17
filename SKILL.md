@@ -270,6 +270,7 @@ For detailed guidance on specific topics, see:
 - [Kubernetes Access Reference](resources/kubernetes-access-reference.md) - Namespace isolation, session namespace references, and pod security policies for workshops with Kubernetes access
 - [Data Variables Reference](resources/data-variables-reference.md) - Complete list of data variables for parameterizing workshop instructions, terminal commands, and workshop definitions
 - [Workshop Image Reference](resources/workshop-image-reference.md) - Container image selection for workshops, including pre-built JDK and Conda images
+- [Java Language Reference](resources/java-language-reference.md) - JDK image selection, Maven/Gradle build commands, project layout, and Spring Boot patterns for Java workshops
 - [Workshop Setup Reference](resources/workshop-setup-reference.md) - Setup scripts, environment variables, background services, and terminal customization for the workshop container
 
 ## Skill Version

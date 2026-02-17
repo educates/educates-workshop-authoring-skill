@@ -287,6 +287,73 @@ labels:
 
 Old Educates documentation incorrectly showed labels as a dictionary (key-value pairs). This format is wrong. Always use the array format with objects containing `name` and `value` properties as shown in the correct example above.
 
+## Session Ingresses
+
+Session ingresses use the workshop session proxy to expose an HTTP service for browser access within the workshop. They are configured under `spec.session.ingresses`.
+
+Each entry defines a named route through the session proxy. The proxy creates an externally accessible hostname of the form `{name}-$(session_hostname)` and forwards requests to the specified backend.
+
+### Proxying to a Kubernetes Service
+
+To proxy to a Kubernetes Service running in the session namespace, specify the `host` as the fully qualified service DNS name and the `port`:
+
+```yaml
+# Path: spec.session
+session:
+  ingresses:
+  - name: app
+    protocol: http
+    host: app.$(session_namespace).svc
+    port: 8080
+```
+
+This routes `app-$(session_hostname)` through the session proxy to `app.$(session_namespace).svc:8080`. See the [Kubernetes Access Reference](kubernetes-access-reference.md) for more details on this variant, including when to prefer it over a manually created Kubernetes Ingress.
+
+### Proxying to a Process in the Workshop Container
+
+To proxy to a process running directly inside the workshop container (e.g., a web application started from the terminal), omit the `host` field. It defaults to `localhost`, routing to the specified port on the workshop container itself:
+
+```yaml
+# Path: spec.session
+session:
+  ingresses:
+  - name: app
+    protocol: http
+    port: 8080
+```
+
+This routes `app-$(session_hostname)` through the session proxy to `localhost:8080` inside the workshop container. Use this when the user starts an application process from the terminal that listens on a port and you want to make it accessible in the browser.
+
+### Embedding in a Dashboard Tab
+
+Combine `spec.session.ingresses` with `spec.session.dashboards` to embed a proxied service as a tab in the workshop dashboard:
+
+```yaml
+# Path: spec.session
+session:
+  ingresses:
+  - name: app
+    protocol: http
+    port: 8080
+  dashboards:
+  - name: App
+    url: "$(ingress_protocol)://app-$(session_hostname)/"
+```
+
+The `name` in the dashboard entry is the label shown on the tab. The `url` must use `$(ingress_protocol)` to match the protocol Educates is running under (HTTP or HTTPS), and the hostname must match the ingress `name` prefixed to `$(session_hostname)`.
+
+Workshop instructions can then reveal the dashboard tab at the appropriate point using the `dashboard:open-dashboard` clickable action:
+
+````markdown
+```dashboard:open-dashboard
+name: App
+```
+````
+
+**Why use session ingresses instead of direct URLs?** The session proxy provides automatic HTTPS when Educates is deployed with secure ingress, avoids mixed-content errors when embedding in iframes, and gates access through the same authentication as the workshop dashboard.
+
+**IMPORTANT:** If you define a session ingress with a `name` of `app`, you cannot also have the user create a separate Kubernetes Ingress using a hostname of `app-$(session_hostname)`. The session proxy has already claimed that hostname.
+
 ## Decision Flowchart
 
 When generating a workshop.yaml, determine:
