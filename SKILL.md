@@ -122,6 +122,12 @@ spec:
 
 Workshop instructions are placed in the `workshop/content/` directory as Markdown files rendered by Hugo.
 
+#### Guided Instruction Through Clickable Actions
+
+By default, workshop instructions should provide a guided experience where all code interaction — viewing, running, and modifying — is driven through clickable actions. Learners should not be asked to type commands into the terminal or write code into the editor by hand. Instead, every interaction should use the appropriate clickable action (`terminal:execute`, `editor:open-file`, `editor:replace-matching-text`, etc.). This keeps learners focused on the concepts rather than on mechanics. If the person requesting the workshop explicitly asks for a different experience, adjust accordingly.
+
+Refer to [resources/workshop-design-principles.md](resources/workshop-design-principles.md) for the complete design philosophy, including guidance on how learners should view, run, and modify code, and how to structure the `exercises/` directory as a pre-populated workspace.
+
 #### Clickable Actions in Instructions
 
 Workshop instructions use clickable actions — special fenced code blocks that let users execute commands, edit files, and interact with the workshop environment by clicking. Refer to [resources/clickable-actions-reference.md](resources/clickable-actions-reference.md) for the complete list of action types and detailed syntax.
@@ -266,6 +272,12 @@ After generating workshop instruction pages, verify the following:
 - [ ] After any `terminal:execute` action that follows a step where the user was viewing a non-terminal dashboard tab (e.g., a web application), the instructions guide the user back to the correct tab using `dashboard:open-dashboard` or `dashboard:reload-dashboard`
 - [ ] The visible dashboard tab is tracked throughout the instructions, just as the terminal working directory is tracked
 
+**Guided instruction:**
+- [ ] All code viewing uses editor clickable actions (`editor:open-file`, `editor:select-matching-text`) — not plain code blocks or terminal commands like `cat`
+- [ ] All command execution uses `terminal:execute` clickable actions — learners are never asked to type commands manually
+- [ ] All code modifications use editor clickable actions (`editor:replace-matching-text`, `editor:append-lines-after-match`, etc.) — learners are never asked to edit files by hand
+- [ ] `workshop:copy` or `workshop:copy-and-edit` are only used where content must be customized per-learner and cannot be handled by data variables
+
 **Content focus:**
 - [ ] Workshop overview and summary describe the subject matter, not the Educates platform
 - [ ] Learning objectives focus on what the user will learn about the topic
@@ -275,6 +287,7 @@ After generating workshop instruction pages, verify the following:
 
 For detailed guidance on specific topics, see:
 
+- [Workshop Design Principles](resources/workshop-design-principles.md) - Guided experience philosophy, the no-manual-typing rule, and guidance on how learners should view, run, and modify code
 - [Workshop YAML Reference](resources/workshop-yaml-reference.md) - Complete workshop.yaml structure and options
 - [Images in Workshop Pages](resources/images-in-workshop-pages.md) - How to include images using page bundles and static assets
 - [Clickable Actions Reference](resources/clickable-actions-reference.md) - Index of all clickable action types, YAML syntax safety guidance, and links to category-specific references in [resources/clickable-actions/](resources/clickable-actions/)
