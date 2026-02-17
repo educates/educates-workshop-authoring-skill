@@ -198,6 +198,39 @@ group: 1
 ```
 ````
 
+### Multi-line matching
+
+The `text` property can span multiple lines, allowing you to select an entire block of content in the editor.
+
+**Example — select a multi-line block:**
+
+````markdown
+```editor:select-matching-text
+file: ~/exercises/deployment.yaml
+text: |
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+```
+````
+
+When the text to match starts with leading spaces (because it is indented within the file), use the YAML block scalar **indent indicator** to preserve those spaces. The digit after `|` specifies how many spaces form the indentation level:
+
+**Example — select indented content using indent indicator:**
+
+````markdown
+```editor:select-matching-text
+file: ~/exercises/deployment.yaml
+text: |2
+      containers:
+      - name: app
+        image: myapp:v1
+```
+````
+
+Without the indent indicator (`|2`), the YAML parser strips the leading spaces and the match fails against the indented content in the file. See the [indent indicator note under `editor:replace-matching-text`](#multi-line-matching-and-replacement) for a fuller explanation.
+
 ## editor:select-lines-in-range
 
 Selects a range of lines by line number. The selected text can then be replaced using `editor:replace-text-selection`.
@@ -278,6 +311,56 @@ isRegex: true
 count: -1
 ```
 ````
+
+### Multi-line matching and replacement
+
+The `match` and `replacement` properties can span multiple lines, allowing you to find and replace entire blocks of content such as YAML fragments, code blocks, or configuration sections.
+
+**Example — replace a multi-line YAML block:**
+
+````markdown
+```editor:replace-matching-text
+file: ~/exercises/deployment.yaml
+match: |
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+replacement: |
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+```
+````
+
+**YAML indentation indicator for preserving leading spaces:** When the replacement text has leading spaces on the first line (common with indented code or YAML fragments), use the YAML block scalar **indent indicator** — a digit after the `|` that specifies how many spaces form the indentation. Without it, YAML may strip or misinterpret the leading whitespace.
+
+**Example — replacing indented content using indent indicator:**
+
+If the content to match is nested inside a YAML structure and starts with spaces, use `|2` (or the appropriate indent level) to tell the YAML parser that the content is indented by that many spaces:
+
+````markdown
+```editor:replace-matching-text
+file: ~/exercises/deployment.yaml
+match: |2
+      containers:
+      - name: app
+        image: myapp:v1
+replacement: |2
+      containers:
+      - name: app
+        image: myapp:v2
+        env:
+        - name: LOG_LEVEL
+          value: debug
+```
+````
+
+The digit after `|` (e.g., `|2`, `|4`, `|6`) indicates the number of spaces used for indentation in the block content. The YAML parser uses this to correctly determine where the content starts, preserving all leading spaces as part of the actual text. Without the indicator, the YAML parser treats the leading spaces as YAML indentation and strips them, causing the match to fail or the replacement to be inserted with incorrect indentation.
 
 ## editor:replace-lines-in-range
 
