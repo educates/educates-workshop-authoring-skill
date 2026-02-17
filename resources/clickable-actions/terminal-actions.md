@@ -40,6 +40,10 @@ clear: true
 ```
 ````
 
+**When to use `clear: true`:** When workshop instructions issue many successive terminal commands — for example, running a series of examples or repeating a command after making changes — output from earlier commands can make it hard to identify the result of the current command. Using `clear: true` clears the terminal buffer before execution so the user only sees the output of that command. This is especially useful when the previous output is not needed for reference.
+
+An alternative to clearing the terminal is to customize the shell prompt so that each command's output is visually separated. For example, colorizing the prompt or adding a blank line before it makes it easier to find where each command starts when scrolling back. See [workshop-setup-reference.md](../workshop-setup-reference.md) for prompt customization via `workshop/profile`.
+
 **Example — command containing YAML-special characters (use block scalar):**
 
 ````markdown
