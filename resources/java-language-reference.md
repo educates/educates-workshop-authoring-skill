@@ -30,10 +30,6 @@ spec:
     files:
     - image:
         url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
-      includePaths:
-      - /workshop/**
-      - /exercises/**
-      - /README.md
 ```
 
 See the [Workshop Image Reference](workshop-image-reference.md) for more details on image selection and configuration.

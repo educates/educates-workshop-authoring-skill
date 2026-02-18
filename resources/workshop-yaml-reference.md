@@ -19,6 +19,7 @@ spec:
   labels: []                            # spec.labels
   publish:                              # spec.publish (REQUIRED)
     image: ""                           # spec.publish.image
+    files: []                           # spec.publish.files
   workshop:                             # spec.workshop (REQUIRED)
     image: ""                           # spec.workshop.image (optional, defaults to base-environment)
     files: []                           # spec.workshop.files
@@ -101,14 +102,17 @@ spec:
   difficulty: beginner
   publish:
     image: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
-  workshop:
     files:
-    - image:
-        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+    - directory:
+        path: .
       includePaths:
       - /workshop/**
       - /exercises/**
       - /README.md
+  workshop:
+    files:
+    - image:
+        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
   session:
     namespaces:
       budget: medium
@@ -141,17 +145,22 @@ spec:
 spec:
   publish:
     image: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
-  workshop:
     files:
-    - image:
-        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+    - directory:
+        path: .
       includePaths:
       - /workshop/**
       - /exercises/**
       - /README.md
+  workshop:
+    files:
+    - image:
+        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
 ```
 
 Replace `{workshop-name}` with the actual workshop name from `metadata.name`.
+
+The `spec.publish.files` section controls which files from the project directory are packaged into the published OCI image. Only the paths matching `includePaths` are included, keeping the published image small and free of development-time files. The `spec.workshop.files` section specifies where to pull the files from at runtime — since the published image already contains only the needed files, no `includePaths` is required there.
 
 The `/exercises/**` path is included because the `exercises/` directory receives special treatment: when it exists in the imported workshop files, terminals start with `~/exercises` as the working directory and the VS Code editor opens on it instead of the home directory. See the "exercises Directory" section in the main skill document for details.
 
@@ -162,7 +171,9 @@ The `/exercises/**` path is included because the `exercises/` directory receives
 
 ### Alternative File Sources
 
-The primary source for workshop files is an OCI image (shown above), which is the standard for published workshops. The `spec.workshop.files` array also supports Git repository and HTTP sources, and can contain multiple entries that are overlaid in order.
+The primary source for workshop files is an OCI image (shown above), which is the standard for published workshops. When using the standard OCI image source, `includePaths` is not needed on `spec.workshop.files` because the image is already filtered at publish time via `spec.publish.files`.
+
+The `spec.workshop.files` array also supports Git repository and HTTP sources, and can contain multiple entries that are overlaid in order. For these alternative sources, `includePaths` can be used on `spec.workshop.files` entries to filter what is pulled from the unfiltered source.
 
 **Git repository source:**
 

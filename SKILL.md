@@ -96,17 +96,20 @@ The workshop.yaml MUST include these sections with this exact structure (substit
 spec:
   publish:
     image: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
-  workshop:
     files:
-    - image:
-        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
+    - directory:
+        path: .
       includePaths:
       - /workshop/**
       - /exercises/**
       - /README.md
+  workshop:
+    files:
+    - image:
+        url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
 ```
 
-**IMPORTANT:** Do NOT use `spec.content.files` — this is a deprecated format. Always use `spec.publish` and `spec.workshop.files` as shown above. The `$(image_repository)` and `$(workshop_version)` variables must be used exactly as shown to support local workshop publishing and deployment workflows. The `spec.workshop.files` array also supports Git and HTTP sources and can contain multiple entries overlaid in order — see the "Alternative File Sources" section in the workshop YAML reference for details.
+**IMPORTANT:** Do NOT use `spec.content.files` — this is a deprecated format. Always use `spec.publish` and `spec.workshop.files` as shown above. The `$(image_repository)` and `$(workshop_version)` variables must be used exactly as shown to support local workshop publishing and deployment workflows. The `spec.publish.files` section controls which files are packaged into the published OCI image — only the listed paths are included, keeping the image small. The `spec.workshop.files` section specifies where to pull the files from at runtime; since the published image is already filtered, no `includePaths` is needed there. The `spec.workshop.files` array also supports Git and HTTP sources and can contain multiple entries overlaid in order — see the "Alternative File Sources" section in the workshop YAML reference for details.
 
 **Additional configuration:**
 
@@ -120,7 +123,24 @@ spec:
 - Only set `spec.session.namespaces.security.token.enabled` to `true` if the workshop needs kubectl or uses the Kubernetes console
 - Omit any applications that are not needed (do not include with `enabled: false`)
 
-### 6. Create Workshop Instructions
+### 6. Create the AI Assistant Instructions File
+
+**Skip this step if any of the following are true:**
+- An AI assistant instructions file (e.g., `CLAUDE.md`, `AGENTS.md`) already exists in the workshop root directory
+- An AI assistant instructions file already exists in a parent directory (indicating the workshop is part of a larger project, such as a course created with the educates-course-design skill)
+
+Create an AI assistant instructions file in the project root so that future AI interactions automatically know the project context and which skills to use. For Claude Code, this file is `CLAUDE.md`; other AI coding agents use different conventions (e.g., `AGENTS.md`).
+
+The instructions file should contain:
+
+- A pointer to `README.md` for the project overview and description
+- **Skill references** — when to invoke each skill:
+  - The **educates-workshop-authoring** skill for creating or modifying the workshop definition, instruction pages, and exercise files
+  - The **educates-course-design** skill for course planning, if this workshop is later incorporated into a multi-workshop course
+
+Keep this file focused on AI-specific instructions and project-specific overrides. Do not duplicate content that already exists in `README.md` — reference it instead.
+
+### 7. Create Workshop Instructions
 
 Workshop instructions are placed in the `workshop/content/` directory as Markdown files rendered by Hugo.
 
@@ -240,14 +260,15 @@ workshop/content/
 
 A page bundle is a directory containing `index.md` plus any associated assets (images, etc.). For detailed guidance on including images in workshop pages, see [resources/images-in-workshop-pages.md](resources/images-in-workshop-pages.md).
 
-### 7. Verify Workshop Definition
+### 8. Verify Workshop Definition
 
 After generating `resources/workshop.yaml`, verify the following critical items:
 
 **Required sections exist:**
-- [ ] `spec.publish` section exists with `image` field
+- [ ] `spec.publish` section exists with `image` and `files` fields
+- [ ] `spec.publish.files` uses `includePaths` to select only `/workshop/**`, `/exercises/**`, and `/README.md`
 - [ ] `spec.workshop` section exists with `files` array
-- [ ] Both use `$(image_repository)` and `$(workshop_version)` variables
+- [ ] Both `spec.publish.image` and `spec.workshop.files` use `$(image_repository)` and `$(workshop_version)` variables
 
 **Deprecated formats NOT used:**
 - [ ] `spec.content.files` is NOT present (use `spec.workshop.files` instead)
@@ -257,7 +278,7 @@ After generating `resources/workshop.yaml`, verify the following critical items:
 - [ ] Only required applications are included (omit disabled ones entirely)
 - [ ] `spec.session.namespaces.security.token.enabled` is explicitly set to `false` unless Kubernetes access is needed
 
-### 8. Verify Workshop Instructions
+### 9. Verify Workshop Instructions
 
 After generating workshop instruction pages, verify the following:
 

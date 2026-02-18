@@ -37,13 +37,9 @@ spec:
     files:
     - image:
         url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
-      includePaths:
-      - /workshop/**
-      - /exercises/**
-      - /README.md
 ```
 
-The `workshop.image` field sits alongside the existing `workshop.files` configuration. The rest of the workshop definition remains the same.
+The `workshop.image` field sits alongside the existing `workshop.files` configuration. The rest of the workshop definition remains the same. No `includePaths` is needed here because the published OCI image is already filtered via `spec.publish.files`.
 
 ## Custom Workshop Images
 
@@ -56,10 +52,6 @@ spec:
     files:
     - image:
         url: "$(image_repository)/{workshop-name}-files:$(workshop_version)"
-      includePaths:
-      - /workshop/**
-      - /exercises/**
-      - /README.md
 ```
 
 The `$(image_repository)` and `$(workshop_version)` data variables follow the same convention as `workshop.files` — they are rewritten during publishing. The `-image` suffix distinguishes the custom workshop base image from the `-files` OCI artefact containing workshop content.
