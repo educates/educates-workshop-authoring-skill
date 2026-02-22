@@ -131,7 +131,17 @@ This step applies only to standalone workshops that live in their own Git reposi
 
 When requested, create a `.github/workflows/publish-workshop.yaml` file in the workshop repository. Refer to [resources/workshop-publishing-reference.md](resources/workshop-publishing-reference.md) for the complete workflow configuration, action parameters, and how publishing relates to the `spec.publish` section in workshop.yaml.
 
-### 7. Create the AI Assistant Instructions File
+### 7. Add Local Docker Compatibility (Only When Requested)
+
+**Skip this step unless the user explicitly asks for the workshop to work on local Docker as well as in Kubernetes.** This step also applies when a user returns to an existing workshop and asks to add local Docker support retrospectively.
+
+Not all workshops are compatible with local Docker deployment. Workshops that require Kubernetes access, a virtual cluster, a session image registry, or that use `environment.objects`, `session.objects`, or `request.objects` in the workshop definition cannot run on local Docker.
+
+When local Docker support is requested for a compatible workshop, the main change is appending the `ingress_port_suffix` data variable to all session proxy URLs — in both the workshop definition and workshop instructions. This variable is an empty string when on standard ports (Kubernetes) and includes the port number when on a non-standard port (local Docker), so adding it has no effect on Kubernetes deployment.
+
+Refer to [resources/local-docker-deployment-reference.md](resources/local-docker-deployment-reference.md) for the full list of restrictions, where to apply the port suffix, and how to retrofit local Docker support onto an existing workshop.
+
+### 8. Create the AI Assistant Instructions File
 
 **Skip this step if any of the following are true:**
 - An AI assistant instructions file (e.g., `CLAUDE.md`, `AGENTS.md`) already exists in the workshop root directory
@@ -148,7 +158,7 @@ The instructions file should contain:
 
 Keep this file focused on AI-specific instructions and project-specific overrides. Do not duplicate content that already exists in `README.md` — reference it instead.
 
-### 8. Create Workshop Instructions
+### 9. Create Workshop Instructions
 
 Workshop instructions are placed in the `workshop/content/` directory as Markdown files rendered by Hugo.
 
@@ -268,7 +278,7 @@ workshop/content/
 
 A page bundle is a directory containing `index.md` plus any associated assets (images, etc.). For detailed guidance on including images in workshop pages, see [resources/images-in-workshop-pages.md](resources/images-in-workshop-pages.md).
 
-### 9. Verify Workshop Definition
+### 10. Verify Workshop Definition
 
 After generating `resources/workshop.yaml`, verify the following critical items:
 
@@ -286,7 +296,7 @@ After generating `resources/workshop.yaml`, verify the following critical items:
 - [ ] Only required applications are included (omit disabled ones entirely)
 - [ ] `spec.session.namespaces.security.token.enabled` is explicitly set to `false` unless Kubernetes access is needed
 
-### 10. Verify Workshop Instructions
+### 11. Verify Workshop Instructions
 
 After generating workshop instruction pages, verify the following:
 
@@ -334,6 +344,7 @@ For detailed guidance on specific topics, see:
 - [Hugo Shortcodes Reference](resources/hugo-shortcodes-reference.md) - Admonition callouts (note, warning, danger), pathway conditional rendering, and custom shortcodes for workshop instructions
 - [Session Objects Reference](resources/session-objects-reference.md) - Pre-creating Kubernetes resources per session, shared environment objects, request objects, and workshop container resource configuration
 - [Workshop Publishing Reference](resources/workshop-publishing-reference.md) - How to add a GitHub Actions workflow for publishing a standalone workshop to GitHub container registry using the Educates publish-workshop GitHub Action. Consult this when a user asks to set up publishing for a workshop, whether during initial creation or when adding it to an existing workshop later.
+- [Local Docker Deployment Reference](resources/local-docker-deployment-reference.md) - Restrictions and required changes for workshops that need to run on local Docker as well as in Kubernetes. Consult this when a user asks for local Docker compatibility, whether during initial creation or when retrofitting it onto an existing workshop.
 
 ## Skill Version
 
