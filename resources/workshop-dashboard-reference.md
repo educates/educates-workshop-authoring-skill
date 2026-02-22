@@ -30,7 +30,41 @@ name: Editor
 ```
 ````
 
-Certain clickable actions also switch tabs implicitly. For example, a `terminal:execute` action will switch focus to the Terminal tab if it is not already visible, so the user can see the command output.
+### Implicit Tab Exposure by Terminal and Editor Actions
+
+All terminal clickable actions (`terminal:execute`, `terminal:input`, `terminal:interrupt`, `terminal:select`, `terminal:clear`, etc.) automatically expose the Terminal dashboard tab when triggered. Similarly, all editor clickable actions (`editor:open-file`, `editor:create-file`, `editor:replace-matching-text`, `editor:append-lines-to-file`, etc.) automatically expose the Editor dashboard tab.
+
+Because these actions already make the relevant tab visible, do not add a `dashboard:open-dashboard` action immediately after them to open the Terminal or Editor tab — it is redundant.
+
+**Avoid this — redundant tab switch after an editor action:**
+
+````markdown
+```editor:replace-matching-text
+file: ~/exercises/deployment.yaml
+match: "nginx:1.19"
+replacement: "nginx:1.25"
+```
+
+```dashboard:open-dashboard
+name: Editor
+```
+````
+
+The `dashboard:open-dashboard` above is unnecessary because `editor:replace-matching-text` already exposed the Editor tab.
+
+**Correct — the editor action alone is sufficient:**
+
+````markdown
+```editor:replace-matching-text
+file: ~/exercises/deployment.yaml
+match: "nginx:1.19"
+replacement: "nginx:1.25"
+```
+````
+
+The same applies to terminal actions. For example, `terminal:execute` already exposes the Terminal tab, so following it with `dashboard:open-dashboard` for Terminal is redundant.
+
+Note that `dashboard:open-dashboard` is still needed when switching to other dashboard tabs such as custom web application tabs, Console, or any tab that is not the direct target of a terminal or editor action. The guidance in the next section on managing tab visibility for custom tabs remains important.
 
 ## Single-Tab Visibility and Its Implications
 
