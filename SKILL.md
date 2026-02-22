@@ -123,7 +123,15 @@ spec:
 - Only set `spec.session.namespaces.security.token.enabled` to `true` if the workshop needs kubectl or uses the Kubernetes console
 - Omit any applications that are not needed (do not include with `enabled: false`)
 
-### 6. Create the AI Assistant Instructions File
+### 6. Add GitHub Actions Workflow for Publishing (Only When Requested)
+
+**Skip this step during initial workshop creation unless the user explicitly asks to set up publishing of the workshop to GitHub container registry using a GitHub action.** This step also applies when a user returns to an existing workshop and asks to add publishing support after the workshop has already been created.
+
+This step applies only to standalone workshops that live in their own Git repository. If the workshop is part of a course containing multiple workshops, do not use this GitHub action — publishing for courses is handled differently.
+
+When requested, create a `.github/workflows/publish-workshop.yaml` file in the workshop repository. Refer to [resources/workshop-publishing-reference.md](resources/workshop-publishing-reference.md) for the complete workflow configuration, action parameters, and how publishing relates to the `spec.publish` section in workshop.yaml.
+
+### 7. Create the AI Assistant Instructions File
 
 **Skip this step if any of the following are true:**
 - An AI assistant instructions file (e.g., `CLAUDE.md`, `AGENTS.md`) already exists in the workshop root directory
@@ -140,7 +148,7 @@ The instructions file should contain:
 
 Keep this file focused on AI-specific instructions and project-specific overrides. Do not duplicate content that already exists in `README.md` — reference it instead.
 
-### 7. Create Workshop Instructions
+### 8. Create Workshop Instructions
 
 Workshop instructions are placed in the `workshop/content/` directory as Markdown files rendered by Hugo.
 
@@ -260,7 +268,7 @@ workshop/content/
 
 A page bundle is a directory containing `index.md` plus any associated assets (images, etc.). For detailed guidance on including images in workshop pages, see [resources/images-in-workshop-pages.md](resources/images-in-workshop-pages.md).
 
-### 8. Verify Workshop Definition
+### 9. Verify Workshop Definition
 
 After generating `resources/workshop.yaml`, verify the following critical items:
 
@@ -278,7 +286,7 @@ After generating `resources/workshop.yaml`, verify the following critical items:
 - [ ] Only required applications are included (omit disabled ones entirely)
 - [ ] `spec.session.namespaces.security.token.enabled` is explicitly set to `false` unless Kubernetes access is needed
 
-### 9. Verify Workshop Instructions
+### 10. Verify Workshop Instructions
 
 After generating workshop instruction pages, verify the following:
 
@@ -325,6 +333,7 @@ For detailed guidance on specific topics, see:
 - [Workshop Setup Reference](resources/workshop-setup-reference.md) - Setup scripts, environment variables, background services, and terminal customization for the workshop container
 - [Hugo Shortcodes Reference](resources/hugo-shortcodes-reference.md) - Admonition callouts (note, warning, danger), pathway conditional rendering, and custom shortcodes for workshop instructions
 - [Session Objects Reference](resources/session-objects-reference.md) - Pre-creating Kubernetes resources per session, shared environment objects, request objects, and workshop container resource configuration
+- [Workshop Publishing Reference](resources/workshop-publishing-reference.md) - How to add a GitHub Actions workflow for publishing a standalone workshop to GitHub container registry using the Educates publish-workshop GitHub Action. Consult this when a user asks to set up publishing for a workshop, whether during initial creation or when adding it to an existing workshop later.
 
 ## Skill Version
 
