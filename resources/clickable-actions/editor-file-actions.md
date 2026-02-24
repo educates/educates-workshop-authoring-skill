@@ -273,9 +273,46 @@ text: nginx:latest
 ```
 ````
 
+### Two-step workflow for multi-line replacements
+
+When replacing a multi-line block of text, use `editor:select-matching-text` to highlight the target block first, then `editor:replace-text-selection` to apply the replacement. Place explanatory commentary between the two actions so the learner has time to read the highlighted code and understand what is about to change. This is preferred over a single `editor:replace-matching-text` for multi-line changes because the instant replacement otherwise makes it difficult for the learner to see what was there before.
+
+**Example — select, explain, then replace a multi-line block:**
+
+First, highlight the block that will be replaced:
+
+````markdown
+```editor:select-matching-text
+file: ~/exercises/deployment.yaml
+text: |
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+```
+````
+
+The current resource requests are quite conservative. We are going to replace them with higher requests and also add resource limits. This ensures the container gets enough resources to run reliably while preventing it from consuming more than its fair share on the cluster.
+
+````markdown
+```editor:replace-text-selection
+file: ~/exercises/deployment.yaml
+text: |
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+```
+````
+
 ## editor:replace-matching-text
 
-Find and replace text in a single step, without needing to first select and then replace separately.
+Find and replace text in a single step, without needing to first select and then replace separately. Best suited for **single-line or short replacements** where the change is easy for the learner to follow.
+
+For **multi-line replacements**, prefer the two-step workflow of `editor:select-matching-text` followed by `editor:replace-text-selection`. When a large block is replaced in a single action, the change happens instantly and the learner has no opportunity to see what was there before. The two-step approach highlights the target block first, giving the learner time to read the existing code, and then a separate action applies the replacement. Place explanatory commentary between the two actions so the learner understands what is about to change and why. When the replacement would cover an entire file's contents — for example, swapping one code example for the next in a teaching sequence — consider providing the new version as a separate pre-created file instead, so the learner retains visibility of the original for comparison.
 
 **Properties:**
 

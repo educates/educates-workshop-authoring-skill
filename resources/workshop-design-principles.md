@@ -44,7 +44,8 @@ Where a workshop calls for code changes (e.g., adding a decorator, modifying a c
 
 | Change Type | Recommended Action |
 |---|---|
-| Replace specific text in a file | `editor:replace-matching-text` |
+| Replace a short or single-line piece of text | `editor:replace-matching-text` |
+| Replace a multi-line block of text | `editor:select-matching-text` then `editor:replace-text-selection` |
 | Add lines after a specific location | `editor:append-lines-after-match` |
 | Append lines to end of file | `editor:append-lines-to-file` |
 | Insert lines at a specific position | `editor:insert-lines-before-line` or `editor:insert-lines-after-line` |
@@ -53,7 +54,9 @@ Where a workshop calls for code changes (e.g., adding a decorator, modifying a c
 | Create or overwrite a file entirely | `editor:create-file` |
 | Modify YAML structure | `editor:set-yaml-value`, `editor:merge-yaml-values`, etc. |
 
-When making incremental changes, explain what is being changed and why before the clickable action so the learner understands the purpose of the modification. After the action, consider using `editor:select-matching-text` to highlight the changed code so the learner can see exactly what was modified.
+When making incremental changes, explain what is being changed and why before the clickable action so the learner understands the purpose of the modification. For multi-line replacements, prefer the two-step approach: use `editor:select-matching-text` to highlight the target block first, then provide explanatory commentary so the learner can read the existing code and understand what will change, and finally use `editor:replace-text-selection` to apply the replacement. This avoids the problem of large blocks being replaced instantly before the learner can see what was there. For short or single-line replacements, `editor:replace-matching-text` is fine. After any modification, consider using `editor:select-matching-text` to highlight the changed code so the learner can see exactly what was modified.
+
+When a workshop progresses through a series of code examples and the next example would replace all or most of a file's contents, avoid using replacement actions to overwrite the file. Instead, provide the next example as a separate pre-created file in the `exercises/` directory and open it with `editor:open-file`. This lets the learner compare both versions. This guidance applies to illustrative example code introduced for teaching — it does not apply when modifying application files that genuinely need to be updated in place as part of the exercise workflow.
 
 ## The Role of the exercises/ Directory
 
@@ -82,7 +85,7 @@ A common pattern is to provide a working baseline in `exercises/` and then use e
 
 1. Learner views the starter code via `editor:open-file`
 2. Instructions explain the relevant section, using `editor:select-matching-text` to highlight it
-3. A clickable action applies the change (e.g., `editor:replace-matching-text` to add a decorator)
+3. A clickable action applies the change — for short replacements, `editor:replace-matching-text` works well; for multi-line replacements, use `editor:select-matching-text` to highlight the target block, explain what will change, then `editor:replace-text-selection` to apply it
 4. The learner runs the modified code via `terminal:execute` to see the effect
 5. Instructions discuss what changed and why
 
