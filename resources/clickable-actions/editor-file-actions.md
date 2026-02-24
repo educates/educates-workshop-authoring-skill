@@ -273,9 +273,9 @@ text: nginx:latest
 ```
 ````
 
-### Two-step workflow for multi-line replacements
+### Two-step workflow for replacements involving multi-line text
 
-When replacing a multi-line block of text, use `editor:select-matching-text` to highlight the target block first, then `editor:replace-text-selection` to apply the replacement. Place explanatory commentary between the two actions so the learner has time to read the highlighted code and understand what is about to change. This is preferred over a single `editor:replace-matching-text` for multi-line changes because the instant replacement otherwise makes it difficult for the learner to see what was there before.
+When either the text being matched or its replacement spans multiple lines, use `editor:select-matching-text` to highlight the target block first, then `editor:replace-text-selection` to apply the replacement. Place explanatory commentary between the two actions so the learner has time to read the highlighted code and understand what is about to change. This is preferred over a single `editor:replace-matching-text` because the instant replacement otherwise makes it difficult for the learner to see what was there before.
 
 **Example — select, explain, then replace a multi-line block:**
 
@@ -310,9 +310,9 @@ text: |
 
 ## editor:replace-matching-text
 
-Find and replace text in a single step, without needing to first select and then replace separately. Best suited for **single-line or short replacements** where the change is easy for the learner to follow.
+Find and replace text in a single step, without needing to first select and then replace separately. Best suited for **single-line-to-single-line replacements** where both the matched text and its replacement are a single line, making the change easy for the learner to follow.
 
-For **multi-line replacements**, prefer the two-step workflow of `editor:select-matching-text` followed by `editor:replace-text-selection`. When a large block is replaced in a single action, the change happens instantly and the learner has no opportunity to see what was there before. The two-step approach highlights the target block first, giving the learner time to read the existing code, and then a separate action applies the replacement. Place explanatory commentary between the two actions so the learner understands what is about to change and why. When the replacement would cover an entire file's contents — for example, swapping one code example for the next in a teaching sequence — consider providing the new version as a separate pre-created file instead, so the learner retains visibility of the original for comparison.
+When **either the text being matched or its replacement spans multiple lines**, prefer the two-step workflow of `editor:select-matching-text` followed by `editor:replace-text-selection`. When a replacement involves multi-line text on either side, the change happens instantly and the learner has no opportunity to see what was there before. The two-step approach highlights the target block first, giving the learner time to read the existing code, and then a separate action applies the replacement. Place explanatory commentary between the two actions so the learner understands what is about to change and why. When the replacement would cover an entire file's contents — for example, swapping one code example for the next in a teaching sequence — consider providing the new version as a separate pre-created file instead, so the learner retains visibility of the original for comparison.
 
 **Properties:**
 
