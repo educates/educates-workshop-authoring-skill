@@ -24,7 +24,7 @@ url: https://docs.educates.dev
 
 ## dashboard:open-dashboard
 
-Makes a specific dashboard tab visible if it is hidden.
+Makes a specific dashboard tab visible if it is hidden. This is the preferred action when you only need to make a tab visible without reloading its content. Use this instead of `dashboard:reload-dashboard` when no content refresh or URL change is needed.
 
 **Properties:**
 
@@ -73,9 +73,31 @@ url: terminal:build
 ```
 ````
 
+When the workshop will later use `dashboard:reload-dashboard` to change the tab's URL (for example, navigating to a sub-path of the same site), prefer using `dashboard:create-dashboard` for the initial setup rather than pre-defining the dashboard in `spec.session.dashboards`. This keeps the initial URL visible in the workshop instructions, making later URL changes easier to follow. See the [Workshop Dashboard Reference](../workshop-dashboard-reference.md) for the full rationale.
+
 ## dashboard:reload-dashboard
 
 Reloads an existing dashboard tab. If the dashboard does not exist, it will be created (making this a safe alternative to `dashboard:create-dashboard` that won't error on duplicates).
+
+Because dashboard tabs are iframes with no URL bar, users cannot change the URL themselves. This action with a `url` property is the only way to change what URL a dashboard tab displays.
+
+Do not use `dashboard:reload-dashboard` without a `url` just to make a tab visible — this triggers an unnecessary reload of the iframe content. Use `dashboard:open-dashboard` instead when you only need to switch to the tab.
+
+**Avoid this — unnecessary reload just to make a tab visible:**
+
+````markdown
+```dashboard:reload-dashboard
+name: Application
+```
+````
+
+**Correct — use `dashboard:open-dashboard` to switch to a tab without reloading:**
+
+````markdown
+```dashboard:open-dashboard
+name: Application
+```
+````
 
 **Properties:**
 

@@ -767,6 +767,8 @@ name: App
 
 **IMPORTANT:** If you define a session ingress with a `name` of `app`, you cannot also have the user create a separate Kubernetes Ingress using a hostname of `app-$(session_hostname)`. The session proxy has already claimed that hostname.
 
+**Note:** Dashboard tabs are iframes with no URL bar — users cannot see or change the URL the tab is pointing at. To change the displayed URL later in the workshop (for example, navigating to a sub-path), use the `dashboard:reload-dashboard` clickable action with a new `url` property. When the workshop will change the tab's URL during the instructions, consider creating the dashboard dynamically with `dashboard:create-dashboard` in the instructions instead of pre-defining it here. This makes the initial URL visible to the reader at the point they first encounter the tab. See [workshop-dashboard-reference.md](workshop-dashboard-reference.md) for detailed guidance.
+
 ## Pre-created Resources and Container Configuration
 
 Educates can automatically create Kubernetes resources when a session starts and configure the workshop container's own resource limits. For detailed guidance, examples, and all available options, see [session-objects-reference.md](session-objects-reference.md).

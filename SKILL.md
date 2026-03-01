@@ -200,6 +200,8 @@ The workshop dashboard shows only one tab at a time on the right-hand side of th
 
 This matters when writing instructions because certain actions implicitly change which tab is visible. A `terminal:execute` action switches to the Terminal tab, hiding any other tab (such as a web application dashboard) the user was viewing. If the workshop uses a custom dashboard tab (e.g., for a web app accessed via the session proxy), you must explicitly guide the user back to that tab after running terminal commands so they can see the result.
 
+Dashboard tabs are iframes with no URL bar — users cannot see or change the URL the tab is pointing at. To change what a dashboard tab displays, use `dashboard:reload-dashboard` with a new `url`. Use `dashboard:open-dashboard` (not `dashboard:reload-dashboard` without a URL) when you only need to make a tab visible without reloading its content. When a workshop will change a tab's URL during the instructions, prefer creating the tab dynamically with `dashboard:create-dashboard` rather than pre-defining it in `spec.session.dashboards`, so the initial URL is visible in context.
+
 Refer to [resources/workshop-dashboard-reference.md](resources/workshop-dashboard-reference.md) for detailed patterns and examples for handling tab switching in workshop instructions.
 
 #### Data Variables in Instructions
@@ -311,8 +313,10 @@ After generating workshop instruction pages, verify the following:
 - [ ] File paths referenced in prose match the paths used in clickable actions
 
 **Dashboard tab visibility:**
-- [ ] After any `terminal:execute` action that follows a step where the user was viewing a non-terminal dashboard tab (e.g., a web application), the instructions guide the user back to the correct tab using `dashboard:open-dashboard` or `dashboard:reload-dashboard`
+- [ ] After any `terminal:execute` action that follows a step where the user was viewing a non-terminal dashboard tab (e.g., a web application), the instructions guide the user back to the correct tab using `dashboard:open-dashboard` (when no content refresh is needed) or `dashboard:reload-dashboard` (when the content needs reloading or the URL needs to change)
 - [ ] The visible dashboard tab is tracked throughout the instructions, just as the terminal working directory is tracked
+- [ ] `dashboard:reload-dashboard` without a `url` is not used solely to make a tab visible — `dashboard:open-dashboard` is used for that purpose instead
+- [ ] When `dashboard:reload-dashboard` is used to change a dashboard tab's URL during the workshop, the initial dashboard is created with `dashboard:create-dashboard` in the instructions (not pre-defined in `spec.session.dashboards`) so the initial URL is visible to the reader
 
 **Guided instruction:**
 - [ ] All code viewing uses editor clickable actions (`editor:open-file`, `editor:select-matching-text`) — not plain code blocks or terminal commands like `cat`
