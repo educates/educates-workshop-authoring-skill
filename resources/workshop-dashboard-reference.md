@@ -68,7 +68,7 @@ Note that `dashboard:open-dashboard` is still needed when switching to other das
 
 ## Dashboard Tabs Have No URL Bar
 
-Dashboard tabs display embedded content inside an iframe. Unlike a regular browser window, the iframe has no URL bar — the user cannot see or change the URL that the dashboard tab is pointing at.
+Dashboard tabs display embedded content inside an iframe. Unlike a regular browser window, the iframe has no URL bar — the user cannot see or change the URL that the dashboard tab is pointing at. Similarly, because the content is embedded in an iframe, the page title set by the embedded web application is not visible anywhere in the browser — the browser tab/window title is controlled by the topmost parent page (the Educates dashboard itself), so any `<title>` element in the embedded page is hidden from the user.
 
 This means that if a workshop needs to change what URL a dashboard tab displays (for example, navigating from the top-level page of a web application to a sub-path), the workshop instructions must do so explicitly using the `dashboard:reload-dashboard` clickable action with a new `url` property. The user has no way to do this themselves.
 
