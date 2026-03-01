@@ -361,7 +361,7 @@ When the workshop is part of a course that has planning documents (i.e., a `plan
 - **Renamed files**: If you renamed a page file, check that no other workshop pages or planning documents still reference the old filename.
 - **Sequential workshop impact**: For sequential workshops, check whether the next workshop's plan or implementation references anything that changed — its "Connection to Previous Workshop" section, exercises, or narrative hooks may assume the original approach.
 
-These updates don't need to follow a rigid process. The `educates-course-design` skill owns the planning document format, so consult it if you need guidance on structure. The important thing is that the workshop plan ends up reflecting the as-built design rather than the original draft.
+Use the `educates-course-design` skill to make these updates — it owns the planning document format and ensures changes follow the correct structure. The important thing is that the workshop plan ends up reflecting the as-built design rather than the original draft.
 
 ## Reference Guides
 
