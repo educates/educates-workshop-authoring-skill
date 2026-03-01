@@ -329,6 +329,18 @@ After generating workshop instruction pages, verify the following:
 - [ ] Learning objectives focus on what the user will learn about the topic
 - [ ] Platform-specific steps (proxies, ingresses, data variables) are presented as natural parts of the exercise without calling attention to Educates internals
 
+### 12. Update Planning Documents (Course Workshops Only)
+
+When the workshop is part of a course that has planning documents (i.e., a `planning/` directory exists containing workshop plans), check whether any significant changes made during implementation need to be reflected back in the planning documents. The goal is to keep the workshop plan accurate so that planning for subsequent workshops starts from correct information.
+
+**What to update:**
+
+- **Page changes**: If you changed a page's topic or title, rename the page file to match the new content and update the workshop plan's page listing accordingly.
+- **Approach changes**: If you changed the overall approach — switched technique, simplified or restructured exercises, chose a different library or tool — update the workshop plan to describe what was actually built rather than what was originally planned.
+- **Renamed files**: If you renamed a page file, check that no other workshop pages or planning documents still reference the old filename.
+
+These updates don't need to follow a rigid process. The `educates-course-design` skill owns the planning document format, so consult it if you need guidance on structure. The important thing is that the workshop plan ends up reflecting the as-built design rather than the original draft.
+
 ## Reference Guides
 
 For detailed guidance on specific topics, see:
