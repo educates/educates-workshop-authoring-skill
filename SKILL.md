@@ -383,6 +383,7 @@ For detailed guidance on specific topics, see:
 - [Session Objects Reference](resources/session-objects-reference.md) - Pre-creating Kubernetes resources per session, shared environment objects, request objects, and workshop container resource configuration
 - [Workshop Publishing Reference](resources/workshop-publishing-reference.md) - How to add a GitHub Actions workflow for publishing a standalone workshop to GitHub container registry using the Educates publish-workshop GitHub Action. Consult this when a user asks to set up publishing for a workshop, whether during initial creation or when adding it to an existing workshop later.
 - [Local Docker Deployment Reference](resources/local-docker-deployment-reference.md) - Restrictions and required changes for workshops that need to run on local Docker as well as in Kubernetes. Consult this when a user asks for local Docker compatibility, whether during initial creation or when retrofitting it onto an existing workshop.
+- [Local Cluster Deployment Reference](resources/local-cluster-deployment-reference.md) - How to publish, deploy, update, and delete workshops on a local Educates cluster created with `educates create-cluster`. Consult this when a user asks to publish or deploy a workshop to a local cluster. Do not run these commands automatically — only when the user explicitly asks to manage a workshop in the local cluster.
 
 ## Skill Version
 
