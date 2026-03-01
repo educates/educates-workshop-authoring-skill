@@ -183,6 +183,24 @@ command: |-
 
 Also ensure that shell commands use correct quoting — variable expansions containing paths with spaces should be double-quoted, strings with special characters should be properly escaped, etc. See the "YAML Syntax Safety" section in the clickable actions reference for detailed guidance and examples.
 
+**Critical YAML safety rule for editor actions with indented text:** When generating editor clickable actions (`editor:select-matching-text`, `editor:replace-matching-text`, etc.) where the `match`, `replacement`, or `text` content starts with leading spaces — i.e., every line is indented — you **must** use a YAML block scalar **indent indicator** (e.g., `|2`, `|4`) to preserve the whitespace. Without it, the YAML parser strips the leading spaces, causing matches to fail or replacements to be inserted with incorrect indentation. For example:
+
+````markdown
+```editor:replace-matching-text
+file: ~/exercises/deployment.yaml
+match: |2
+      containers:
+      - name: app
+        image: myapp:v1
+replacement: |2
+      containers:
+      - name: app
+        image: myapp:v2
+```
+````
+
+An alternative that avoids needing an indent indicator: expand the match to include enclosing context that starts at column 1. For example, instead of matching only an indented function body, include the function definition line (e.g., `def my_function():`) so the first line of the block scalar has no leading spaces and a plain `|` suffices. This works well for top-level functions but may not help for class methods or other constructs that are themselves indented. See the editor file actions reference for full details on indent indicators.
+
 #### Tracking Terminal Working Directory
 
 When the `exercises/` directory exists, each terminal session starts with `~/exercises` as its current working directory — not the home directory. As you write workshop instructions, you **must track the current working directory of each terminal at every point** in the instructions. Any `cd` command in a `terminal:execute` action changes the working directory for all subsequent commands in that terminal.
@@ -317,6 +335,9 @@ After generating workshop instruction pages, verify the following:
 - [ ] The visible dashboard tab is tracked throughout the instructions, just as the terminal working directory is tracked
 - [ ] `dashboard:reload-dashboard` without a `url` is not used solely to make a tab visible — `dashboard:open-dashboard` is used for that purpose instead
 - [ ] When `dashboard:reload-dashboard` is used to change a dashboard tab's URL during the workshop, the initial dashboard is created with `dashboard:create-dashboard` in the instructions (not pre-defined in `spec.session.dashboards`) so the initial URL is visible to the reader
+
+**YAML syntax in editor actions:**
+- [ ] Every `editor:select-matching-text`, `editor:replace-matching-text`, or similar action where `match`, `replacement`, or `text` content starts with leading spaces uses a YAML block scalar indent indicator (`|2`, `|4`, etc.) — or the match has been expanded to include enclosing context that starts at column 1 so a plain `|` suffices
 
 **Guided instruction:**
 - [ ] All code viewing uses editor clickable actions (`editor:open-file`, `editor:select-matching-text`) — not plain code blocks or terminal commands like `cat`
