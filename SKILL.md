@@ -84,7 +84,7 @@ Because the `exercises/` directory is always recommended, workshop instructions 
 
 ### 5. Generate workshop.yaml
 
-Refer to [resources/workshop-yaml-reference.md](resources/workshop-yaml-reference.md) for the complete workshop.yaml structure and options.
+Refer to [references/workshop-yaml-reference.md](references/workshop-yaml-reference.md) for the complete workshop.yaml structure and options.
 
 Generate the `resources/workshop.yaml` file based on the gathered details.
 
@@ -129,7 +129,7 @@ spec:
 
 This step applies only to standalone workshops that live in their own Git repository. If the workshop is part of a course containing multiple workshops, do not use this GitHub action — publishing for courses is handled differently.
 
-When requested, create a `.github/workflows/publish-workshop.yaml` file in the workshop repository. Refer to [resources/workshop-publishing-reference.md](resources/workshop-publishing-reference.md) for the complete workflow configuration, action parameters, and how publishing relates to the `spec.publish` section in workshop.yaml.
+When requested, create a `.github/workflows/publish-workshop.yaml` file in the workshop repository. Refer to [references/workshop-publishing-reference.md](references/workshop-publishing-reference.md) for the complete workflow configuration, action parameters, and how publishing relates to the `spec.publish` section in workshop.yaml.
 
 ### 7. Add Local Docker Compatibility (Only When Requested)
 
@@ -139,7 +139,7 @@ Not all workshops are compatible with local Docker deployment. Workshops that re
 
 When local Docker support is requested for a compatible workshop, the main change is appending the `ingress_port_suffix` data variable to all session proxy URLs — in both the workshop definition and workshop instructions. This variable is an empty string when on standard ports (Kubernetes) and includes the port number when on a non-standard port (local Docker), so adding it has no effect on Kubernetes deployment.
 
-Refer to [resources/local-docker-deployment-reference.md](resources/local-docker-deployment-reference.md) for the full list of restrictions, where to apply the port suffix, and how to retrofit local Docker support onto an existing workshop.
+Refer to [references/local-docker-deployment-reference.md](references/local-docker-deployment-reference.md) for the full list of restrictions, where to apply the port suffix, and how to retrofit local Docker support onto an existing workshop.
 
 ### 8. Create the AI Assistant Instructions File
 
@@ -166,11 +166,11 @@ Workshop instructions are placed in the `workshop/content/` directory as Markdow
 
 By default, workshop instructions should provide a guided experience where all code interaction — viewing, running, and modifying — is driven through clickable actions. Learners should not be asked to type commands into the terminal or write code into the editor by hand. Instead, every interaction should use the appropriate clickable action (`terminal:execute`, `editor:open-file`, `editor:replace-matching-text`, etc.). This keeps learners focused on the concepts rather than on mechanics. If the person requesting the workshop explicitly asks for a different experience, adjust accordingly.
 
-Refer to [resources/workshop-design-principles.md](resources/workshop-design-principles.md) for the complete design philosophy, including guidance on how learners should view, run, and modify code, and how to structure the `exercises/` directory as a pre-populated workspace.
+Refer to [references/workshop-design-principles.md](references/workshop-design-principles.md) for the complete design philosophy, including guidance on how learners should view, run, and modify code, and how to structure the `exercises/` directory as a pre-populated workspace.
 
 #### Clickable Actions in Instructions
 
-Workshop instructions use clickable actions — special fenced code blocks that let users execute commands, edit files, and interact with the workshop environment by clicking. Refer to [resources/clickable-actions-reference.md](resources/clickable-actions-reference.md) for the complete list of action types and detailed syntax.
+Workshop instructions use clickable actions — special fenced code blocks that let users execute commands, edit files, and interact with the workshop environment by clicking. Refer to [references/clickable-actions-reference.md](references/clickable-actions-reference.md) for the complete list of action types and detailed syntax.
 
 **Critical YAML safety rule for terminal commands:** When generating `terminal:execute` clickable actions, always use YAML block scalar syntax (`command: |-`) if the command contains any characters that are special in YAML (colon, hash, curly braces, square brackets, etc.) or if the command spans multiple lines. This prevents the YAML parser from misinterpreting the command. For example:
 
@@ -220,7 +220,7 @@ This matters when writing instructions because certain actions implicitly change
 
 Dashboard tabs are iframes with no URL bar — users cannot see or change the URL the tab is pointing at. Because the content is embedded in an iframe, the page title of the embedded web application is also not visible anywhere in the browser — the browser tab/window title is dictated by the topmost parent page, not the iframe content. To change what a dashboard tab displays, use `dashboard:reload-dashboard` with a new `url`. Use `dashboard:open-dashboard` (not `dashboard:reload-dashboard` without a URL) when you only need to make a tab visible without reloading its content. When a workshop will change a tab's URL during the instructions, prefer creating the tab dynamically with `dashboard:create-dashboard` rather than pre-defining it in `spec.session.dashboards`, so the initial URL is visible in context.
 
-Refer to [resources/workshop-dashboard-reference.md](resources/workshop-dashboard-reference.md) for detailed patterns and examples for handling tab switching in workshop instructions.
+Refer to [references/workshop-dashboard-reference.md](references/workshop-dashboard-reference.md) for detailed patterns and examples for handling tab switching in workshop instructions.
 
 #### Data Variables in Instructions
 
@@ -238,7 +238,7 @@ command: kubectl get pods -n {{< param session_namespace >}}
 ```
 ````
 
-In terminal commands within clickable actions, you can alternatively use the equivalent uppercase environment variable (e.g., `$SESSION_NAMESPACE`) since the terminal shell has these set automatically. Refer to [resources/data-variables-reference.md](resources/data-variables-reference.md) for the complete list of available data variables and which contexts they can be used in.
+In terminal commands within clickable actions, you can alternatively use the equivalent uppercase environment variable (e.g., `$SESSION_NAMESPACE`) since the terminal shell has these set automatically. Refer to [references/data-variables-reference.md](references/data-variables-reference.md) for the complete list of available data variables and which contexts they can be used in.
 
 #### Page Structure
 
@@ -267,7 +267,7 @@ Content for the second section...
 - Do NOT use a level 1 heading (`#`) — the `title` in frontmatter automatically generates the page header
 - Begin immediately with an introductory paragraph after the frontmatter
 - Use level 2 headings (`##`) and below for any additional sections
-- **Use admonition shortcodes** to highlight important information: `{{< note >}}` for tips, `{{< warning >}}` for cautions, and `{{< danger >}}` for critical warnings. See [resources/hugo-shortcodes-reference.md](resources/hugo-shortcodes-reference.md) for syntax and usage guidance.
+- **Use admonition shortcodes** to highlight important information: `{{< note >}}` for tips, `{{< warning >}}` for cautions, and `{{< danger >}}` for critical warnings. See [references/hugo-shortcodes-reference.md](references/hugo-shortcodes-reference.md) for syntax and usage guidance.
 - **Focus on the workshop topic, not the platform.** Workshop instructions should teach the subject matter, not how Educates works. When the workshop requires platform-specific configuration (e.g., setting up a session proxy for accessing a deployed service, configuring ingresses, or using data variables), present these as natural steps of the exercise without drawing attention to Educates internals. Do not say things like "we will learn how Educates is configured" or "this is how Educates handles ingress" — unless the workshop is specifically about using the Educates platform itself. The overview, summary, and learning objectives should describe what users will learn about the topic, not about the workshop infrastructure supporting it.
 
 #### File Naming Convention
@@ -296,7 +296,7 @@ workshop/content/
 └── 99-workshop-summary.md
 ```
 
-A page bundle is a directory containing `index.md` plus any associated assets (images, etc.). For detailed guidance on including images in workshop pages, see [resources/images-in-workshop-pages.md](resources/images-in-workshop-pages.md).
+A page bundle is a directory containing `index.md` plus any associated assets (images, etc.). For detailed guidance on including images in workshop pages, see [references/images-in-workshop-pages.md](references/images-in-workshop-pages.md).
 
 ### 10. Verify Workshop Definition
 
@@ -367,23 +367,23 @@ Use the `educates-course-design` skill to make these updates — it owns the pla
 
 For detailed guidance on specific topics, see:
 
-- [Workshop Design Principles](resources/workshop-design-principles.md) - Guided experience philosophy, the no-manual-typing rule, and guidance on how learners should view, run, and modify code
-- [Workshop YAML Reference](resources/workshop-yaml-reference.md) - Complete workshop.yaml structure and options
-- [Images in Workshop Pages](resources/images-in-workshop-pages.md) - How to include images using page bundles and static assets
-- [Clickable Actions Reference](resources/clickable-actions-reference.md) - Index of all clickable action types, YAML syntax safety guidance, and links to category-specific references in [resources/clickable-actions/](resources/clickable-actions/)
-- [Workshop Tools Reference](resources/workshop-tools-reference.md) - Command-line tools available in the workshop environment, including utilities for JSON/YAML processing, Kubernetes management, container handling, and load testing
-- [Kubernetes Access Reference](resources/kubernetes-access-reference.md) - Namespace isolation, session namespace references, and pod security policies for workshops with Kubernetes access
-- [Data Variables Reference](resources/data-variables-reference.md) - Complete list of data variables for parameterizing workshop instructions, terminal commands, and workshop definitions
-- [Workshop Dashboard Reference](resources/workshop-dashboard-reference.md) - Dashboard layout, single-tab visibility behavior, and patterns for guiding users between tabs in workshop instructions
-- [Workshop Image Reference](resources/workshop-image-reference.md) - Container image selection for workshops, including pre-built JDK and Conda images
-- [Java Language Reference](resources/java-language-reference.md) - JDK image selection, Maven/Gradle build commands, project layout, and Spring Boot patterns for Java workshops
-- [Python Language Reference](resources/python-language-reference.md) - Python version management, uv/pip package installation, project layout, and web framework patterns for Python workshops
-- [Workshop Setup Reference](resources/workshop-setup-reference.md) - Setup scripts, environment variables, background services, and terminal customization for the workshop container
-- [Hugo Shortcodes Reference](resources/hugo-shortcodes-reference.md) - Admonition callouts (note, warning, danger), pathway conditional rendering, and custom shortcodes for workshop instructions
-- [Session Objects Reference](resources/session-objects-reference.md) - Pre-creating Kubernetes resources per session, shared environment objects, request objects, and workshop container resource configuration
-- [Workshop Publishing Reference](resources/workshop-publishing-reference.md) - How to add a GitHub Actions workflow for publishing a standalone workshop to GitHub container registry using the Educates publish-workshop GitHub Action. Consult this when a user asks to set up publishing for a workshop, whether during initial creation or when adding it to an existing workshop later.
-- [Local Docker Deployment Reference](resources/local-docker-deployment-reference.md) - Restrictions and required changes for workshops that need to run on local Docker as well as in Kubernetes. Consult this when a user asks for local Docker compatibility, whether during initial creation or when retrofitting it onto an existing workshop.
-- [Local Cluster Deployment Reference](resources/local-cluster-deployment-reference.md) - How to publish, deploy, update, and delete workshops on a local Educates cluster created with `educates create-cluster`. Consult this when a user asks to publish or deploy a workshop to a local cluster. Do not run these commands automatically — only when the user explicitly asks to manage a workshop in the local cluster.
+- [Workshop Design Principles](references/workshop-design-principles.md) - Guided experience philosophy, the no-manual-typing rule, and guidance on how learners should view, run, and modify code
+- [Workshop YAML Reference](references/workshop-yaml-reference.md) - Complete workshop.yaml structure and options
+- [Images in Workshop Pages](references/images-in-workshop-pages.md) - How to include images using page bundles and static assets
+- [Clickable Actions Reference](references/clickable-actions-reference.md) - Index of all clickable action types, YAML syntax safety guidance, and links to category-specific references in [references/clickable-actions/](references/clickable-actions/)
+- [Workshop Tools Reference](references/workshop-tools-reference.md) - Command-line tools available in the workshop environment, including utilities for JSON/YAML processing, Kubernetes management, container handling, and load testing
+- [Kubernetes Access Reference](references/kubernetes-access-reference.md) - Namespace isolation, session namespace references, and pod security policies for workshops with Kubernetes access
+- [Data Variables Reference](references/data-variables-reference.md) - Complete list of data variables for parameterizing workshop instructions, terminal commands, and workshop definitions
+- [Workshop Dashboard Reference](references/workshop-dashboard-reference.md) - Dashboard layout, single-tab visibility behavior, and patterns for guiding users between tabs in workshop instructions
+- [Workshop Image Reference](references/workshop-image-reference.md) - Container image selection for workshops, including pre-built JDK and Conda images
+- [Java Language Reference](references/java-language-reference.md) - JDK image selection, Maven/Gradle build commands, project layout, and Spring Boot patterns for Java workshops
+- [Python Language Reference](references/python-language-reference.md) - Python version management, uv/pip package installation, project layout, and web framework patterns for Python workshops
+- [Workshop Setup Reference](references/workshop-setup-reference.md) - Setup scripts, environment variables, background services, and terminal customization for the workshop container
+- [Hugo Shortcodes Reference](references/hugo-shortcodes-reference.md) - Admonition callouts (note, warning, danger), pathway conditional rendering, and custom shortcodes for workshop instructions
+- [Session Objects Reference](references/session-objects-reference.md) - Pre-creating Kubernetes resources per session, shared environment objects, request objects, and workshop container resource configuration
+- [Workshop Publishing Reference](references/workshop-publishing-reference.md) - How to add a GitHub Actions workflow for publishing a standalone workshop to GitHub container registry using the Educates publish-workshop GitHub Action. Consult this when a user asks to set up publishing for a workshop, whether during initial creation or when adding it to an existing workshop later.
+- [Local Docker Deployment Reference](references/local-docker-deployment-reference.md) - Restrictions and required changes for workshops that need to run on local Docker as well as in Kubernetes. Consult this when a user asks for local Docker compatibility, whether during initial creation or when retrofitting it onto an existing workshop.
+- [Local Cluster Deployment Reference](references/local-cluster-deployment-reference.md) - How to publish, deploy, update, and delete workshops on a local Educates cluster created with `educates create-cluster`. Consult this when a user asks to publish or deploy a workshop to a local cluster. Do not run these commands automatically — only when the user explicitly asks to manage a workshop in the local cluster.
 
 ## Skill Version
 
