@@ -75,7 +75,7 @@ If you are using this skill with other AI agents that support the skills format,
 
 ## Compatibility
 
-This skill is aligned with **Educates version 3.6.0**. Workshops generated using this skill may not work with older versions of Educates.
+This skill is aligned with **Educates version 3.7.0**. Workshops generated using this skill may not work with older versions of Educates.
 
 ## Other AI Agents
 

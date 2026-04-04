@@ -47,8 +47,12 @@ Where a workshop calls for code changes (e.g., adding a decorator, modifying a c
 | Replace single-line text with single-line text | `editor:replace-matching-text` |
 | Replace text where either the match or replacement is multi-line | `editor:select-matching-text` then `editor:replace-text-selection` |
 | Add lines after a specific location | `editor:append-lines-after-match` |
+| Add lines before a specific location | `editor:insert-lines-before-match` |
 | Append lines to end of file | `editor:append-lines-to-file` |
-| Insert lines at a specific position | `editor:insert-lines-before-line` or `editor:insert-lines-after-line` |
+| Prepend lines to beginning of file | `editor:prepend-lines-to-file` |
+| Insert lines at a specific position | `editor:insert-lines-before-line` or `editor:append-lines-after-line` |
+| Insert or append lines around selected text | `editor:insert-lines-before-selection` or `editor:append-lines-after-selection` |
+| Delete selected text | `editor:select-matching-text` then `editor:delete-text-selection` |
 | Delete specific lines | `editor:delete-matching-lines` or `editor:delete-lines-in-range` |
 | Replace a range of lines | `editor:replace-lines-in-range` |
 | Create or overwrite a file entirely | `editor:create-file` |

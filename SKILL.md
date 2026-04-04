@@ -342,7 +342,7 @@ After generating workshop instruction pages, verify the following:
 **Guided instruction:**
 - [ ] All code viewing uses editor clickable actions (`editor:open-file`, `editor:select-matching-text`) — not plain code blocks or terminal commands like `cat`
 - [ ] All command execution uses `terminal:execute` clickable actions — learners are never asked to type commands manually
-- [ ] All code modifications use editor clickable actions (`editor:replace-matching-text`, `editor:append-lines-after-match`, etc.) — learners are never asked to edit files by hand
+- [ ] All code modifications use editor clickable actions (`editor:replace-matching-text`, `editor:append-lines-after-match`, `editor:insert-lines-before-match`, etc.) — learners are never asked to edit files by hand
 - [ ] `workshop:copy` or `workshop:copy-and-edit` are only used where content must be customized per-learner and cannot be handled by data variables
 
 **Content focus:**

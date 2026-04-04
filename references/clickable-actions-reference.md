@@ -153,12 +153,17 @@ For details see [clickable-actions/editor-file-actions.md](clickable-actions/edi
 | `editor:create-file` | Create a new file or overwrite an existing file |
 | `editor:create-directory` | Create a directory |
 | `editor:append-lines-to-file` | Append text to end of file (creates file if missing) |
+| `editor:prepend-lines-to-file` | Prepend text to beginning of file (creates file if missing) |
 | `editor:insert-lines-before-line` | Insert text before a line number |
-| `editor:insert-lines-after-line` | Insert text after a line number |
+| `editor:append-lines-after-line` | Insert text after a line number |
 | `editor:append-lines-after-match` | Insert text after a line matching a string |
+| `editor:insert-lines-before-match` | Insert text before a line matching a string |
 | `editor:select-matching-text` | Select text by exact match or regex |
 | `editor:select-lines-in-range` | Select lines by line number range |
 | `editor:replace-text-selection` | Replace currently selected text |
+| `editor:insert-lines-before-selection` | Insert text before currently selected text |
+| `editor:append-lines-after-selection` | Append text after currently selected text |
+| `editor:delete-text-selection` | Delete currently selected text |
 | `editor:replace-matching-text` | Find and replace in a single step |
 | `editor:replace-lines-in-range` | Replace a range of lines |
 | `editor:delete-lines-in-range` | Delete a range of lines |
@@ -301,4 +306,5 @@ Do NOT use these. Use the recommended alternatives:
 | `execute-all` | `terminal:execute-all` |
 | `copy` | `workshop:copy` |
 | `copy-and-edit` | `workshop:copy-and-edit` |
+| `editor:insert-lines-after-line` | `editor:append-lines-after-line` |
 | `editor:insert-value-into-yaml` | `editor:set-yaml-value`, `editor:add-yaml-item`, `editor:insert-yaml-item`, `editor:replace-yaml-item`, `editor:delete-yaml-value`, `editor:merge-yaml-values` |

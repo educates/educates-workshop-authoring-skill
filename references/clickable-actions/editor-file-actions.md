@@ -91,6 +91,30 @@ text: |
 ```
 ````
 
+## editor:prepend-lines-to-file
+
+Prepends text to the beginning of a file. If the file does not exist, it will be created.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `file` | string | (required) | File path |
+| `text` | string | (required) | Text to prepend |
+
+Note: If it is known the file does not already exist, use `editor:create-file` instead for clearer semantic intent.
+
+**Example:**
+
+````markdown
+```editor:prepend-lines-to-file
+file: ~/exercises/app.py
+text: |
+  # Copyright 2024 Example Corp.
+  # Licensed under the Apache License, Version 2.0
+```
+````
+
 ## editor:insert-lines-before-line
 
 Inserts text before a specified line number.
@@ -115,9 +139,11 @@ text: |
 ```
 ````
 
-## editor:insert-lines-after-line
+## editor:append-lines-after-line
 
 Inserts text after a specified line number.
+
+Note: This action was previously named `editor:insert-lines-after-line`. The old name still works but is deprecated — use `editor:append-lines-after-line` in new content. The new name is consistent with the naming convention where "insert" means before and "append" means after.
 
 **Properties:**
 
@@ -130,7 +156,7 @@ Inserts text after a specified line number.
 **Example:**
 
 ````markdown
-```editor:insert-lines-after-line
+```editor:append-lines-after-line
 file: ~/exercises/app.py
 line: 3
 text: |
@@ -161,9 +187,32 @@ text: |
 ```
 ````
 
+## editor:insert-lines-before-match
+
+Inserts text before the first line containing a matching string.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `file` | string | (required) | File path |
+| `match` | string | (required) | Text to search for in lines |
+| `text` | string | (required) | Text to insert before the matching line |
+
+**Example:**
+
+````markdown
+```editor:insert-lines-before-match
+file: ~/exercises/requirements.txt
+match: flask
+text: |
+  # Web framework dependencies
+```
+````
+
 ## editor:select-matching-text
 
-Selects (highlights) text in a file based on exact match or regular expression. Useful as a visual aid or as a precursor to `editor:replace-text-selection`.
+Selects (highlights) text in a file based on exact match or regular expression. Useful as a visual aid or as a precursor to `editor:replace-text-selection`, `editor:insert-lines-before-selection`, `editor:append-lines-after-selection`, or `editor:delete-text-selection`.
 
 **Properties:**
 
@@ -233,7 +282,7 @@ Without the indent indicator (`|2`), the YAML parser strips the leading spaces a
 
 ## editor:select-lines-in-range
 
-Selects a range of lines by line number. The selected text can then be replaced using `editor:replace-text-selection`.
+Selects a range of lines by line number. The selected text can then be acted on using `editor:replace-text-selection`, `editor:insert-lines-before-selection`, `editor:append-lines-after-selection`, or `editor:delete-text-selection`.
 
 **Properties:**
 
@@ -270,6 +319,103 @@ Replaces the currently selected text in a file (selected via `editor:select-matc
 ```editor:replace-text-selection
 file: ~/exercises/deployment.yaml
 text: nginx:latest
+```
+````
+
+## editor:insert-lines-before-selection
+
+Inserts text before the currently selected text in a file. This is a two-step action — text must first be selected using `editor:select-matching-text` or `editor:select-lines-in-range`.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `file` | string | (required) | File path |
+| `text` | string | (required) | Text to insert before the selection |
+
+**Example:**
+
+First, select the target text:
+
+````markdown
+```editor:select-matching-text
+file: ~/exercises/app.py
+text: "def main():"
+after: 0
+```
+````
+
+Then insert a comment block before it:
+
+````markdown
+```editor:insert-lines-before-selection
+file: ~/exercises/app.py
+text: |
+  # Entry point for the application
+```
+````
+
+## editor:append-lines-after-selection
+
+Appends text after the currently selected text in a file. This is a two-step action — text must first be selected using `editor:select-matching-text` or `editor:select-lines-in-range`.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `file` | string | (required) | File path |
+| `text` | string | (required) | Text to append after the selection |
+
+**Example:**
+
+First, select the target text:
+
+````markdown
+```editor:select-matching-text
+file: ~/exercises/app.py
+text: "import flask"
+after: 0
+```
+````
+
+Then append additional imports after it:
+
+````markdown
+```editor:append-lines-after-selection
+file: ~/exercises/app.py
+text: |
+  import logging
+  import os
+```
+````
+
+## editor:delete-text-selection
+
+Deletes the currently selected text in a file. This is a two-step action — text must first be selected using `editor:select-matching-text` or `editor:select-lines-in-range`. If there is no current selection, the action is a no-op.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `file` | string | (required) | File path |
+
+**Example:**
+
+First, select the text to delete:
+
+````markdown
+```editor:select-matching-text
+file: ~/exercises/app.py
+text: "# TODO: remove this temporary workaround"
+after: 0
+```
+````
+
+Then delete the selected text:
+
+````markdown
+```editor:delete-text-selection
+file: ~/exercises/app.py
 ```
 ````
 

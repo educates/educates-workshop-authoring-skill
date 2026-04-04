@@ -32,7 +32,7 @@ name: Editor
 
 ### Implicit Tab Exposure by Terminal and Editor Actions
 
-All terminal clickable actions (`terminal:execute`, `terminal:input`, `terminal:interrupt`, `terminal:select`, `terminal:clear`, etc.) automatically expose the Terminal dashboard tab when triggered. Similarly, all editor clickable actions (`editor:open-file`, `editor:create-file`, `editor:replace-matching-text`, `editor:append-lines-to-file`, etc.) automatically expose the Editor dashboard tab.
+All terminal clickable actions (`terminal:execute`, `terminal:input`, `terminal:interrupt`, `terminal:select`, `terminal:clear`, etc.) automatically expose the Terminal dashboard tab when triggered. Similarly, all editor clickable actions (`editor:open-file`, `editor:create-file`, `editor:replace-matching-text`, `editor:append-lines-to-file`, `editor:prepend-lines-to-file`, etc.) automatically expose the Editor dashboard tab.
 
 Because these actions already make the relevant tab visible, do not add a `dashboard:open-dashboard` action immediately after them to open the Terminal or Editor tab — it is redundant.
 
