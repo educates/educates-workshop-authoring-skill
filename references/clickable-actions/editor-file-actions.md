@@ -2,6 +2,8 @@
 
 Actions for opening, creating, editing, and managing files through the embedded editor. These require the editor to be enabled in the workshop session.
 
+Note: When a `text` or `replacement` property ends with trailing blank lines, those blank lines will be silently stripped by Hugo if the property is the last in the YAML block. To preserve them, add `eot: true` as the final property. See the ["Trailing blank lines in text properties"](../clickable-actions-reference.md#trailing-blank-lines-in-text-properties) section in the clickable actions reference for details.
+
 ## editor:open-file
 
 Opens a file in the editor. Optionally positions the cursor on a specific line.

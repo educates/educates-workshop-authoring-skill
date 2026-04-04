@@ -201,6 +201,20 @@ replacement: |2
 
 An alternative that avoids needing an indent indicator: expand the match to include enclosing context that starts at column 1. For example, instead of matching only an indented function body, include the function definition line (e.g., `def my_function():`) so the first line of the block scalar has no leading spaces and a plain `|` suffices. This works well for top-level functions but may not help for class methods or other constructs that are themselves indented. See the editor file actions reference for full details on indent indicators.
 
+**Critical YAML safety rule for trailing blank lines in text properties:** When an editor clickable action's `text` or `replacement` property ends with one or more blank lines, Hugo's Markdown processor will silently strip those trailing blank lines from the code fence before the YAML is parsed — but only if the property is the last in the YAML block. To preserve trailing blank lines, add `eot: true` as the final property in the YAML. For example:
+
+````markdown
+```editor:insert-lines-before-selection
+file: ~/exercises/app.py
+text: |
+  # --- Section boundary ---
+
+eot: true
+```
+````
+
+The `eot: true` property has no meaning to the clickable action — it exists solely to prevent Hugo from discarding the trailing blank lines. See the "Trailing blank lines in text properties" section in the clickable actions reference for detailed guidance.
+
 #### Tracking Terminal Working Directory
 
 When the `exercises/` directory exists, each terminal session starts with `~/exercises` as its current working directory — not the home directory. As you write workshop instructions, you **must track the current working directory of each terminal at every point** in the instructions. Any `cd` command in a `terminal:execute` action changes the working directory for all subsequent commands in that terminal.
@@ -338,6 +352,7 @@ After generating workshop instruction pages, verify the following:
 
 **YAML syntax in editor actions:**
 - [ ] Every `editor:select-matching-text`, `editor:replace-matching-text`, or similar action where `match`, `replacement`, or `text` content starts with leading spaces uses a YAML block scalar indent indicator (`|2`, `|4`, etc.) — or the match has been expanded to include enclosing context that starts at column 1 so a plain `|` suffices
+- [ ] Every editor clickable action where the `text` or `replacement` property ends with trailing blank lines includes `eot: true` as the final YAML property to prevent Hugo from stripping those blank lines
 
 **Guided instruction:**
 - [ ] All code viewing uses editor clickable actions (`editor:open-file`, `editor:select-matching-text`) — not plain code blocks or terminal commands like `cat`

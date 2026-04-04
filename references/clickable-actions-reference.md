@@ -126,6 +126,37 @@ command: |-
 
 Always test that commands work correctly in a terminal before embedding them in workshop instructions.
 
+### Trailing blank lines in text properties
+
+When a `text` or `replacement` property in an editor clickable action ends with one or more blank lines, those blank lines can be silently lost. This happens because Hugo's Markdown processor strips trailing blank lines from inside fenced code blocks before the content reaches the YAML parser. If the property with trailing blank lines is the last property in the YAML block, the blank lines appear as trailing content in the code fence and Hugo removes them.
+
+The fix is to add a dummy property `eot: true` ("end of text") as the **last** property in the YAML block. This ensures the trailing blank lines in the `text` or `replacement` value are interior to the code fence rather than trailing, so Hugo preserves them.
+
+**WRONG — trailing blank line in `text` is silently stripped by Hugo:**
+
+````markdown
+```editor:insert-lines-before-selection
+file: ~/exercises/app.py
+text: |
+  # --- Section boundary ---
+
+```
+````
+
+**CORRECT — `eot: true` preserves the trailing blank line:**
+
+````markdown
+```editor:insert-lines-before-selection
+file: ~/exercises/app.py
+text: |
+  # --- Section boundary ---
+
+eot: true
+```
+````
+
+The `eot: true` property has no meaning to the clickable action itself — it exists solely to prevent Hugo from discarding trailing blank lines. Use it whenever a `text`, `replacement`, or other block scalar property needs to end with one or more blank lines. This applies to any editor clickable action with text content, including `editor:create-file`, `editor:append-lines-to-file`, `editor:prepend-lines-to-file`, `editor:replace-text-selection`, `editor:replace-matching-text`, `editor:insert-lines-before-selection`, `editor:append-lines-after-selection`, and others.
+
 ## All Clickable Action Types
 
 ### Terminal Actions
