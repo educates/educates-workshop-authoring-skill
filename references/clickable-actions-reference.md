@@ -130,7 +130,12 @@ Always test that commands work correctly in a terminal before embedding them in 
 
 When a `text` or `replacement` property in an editor clickable action ends with one or more blank lines, those blank lines can be silently lost. This happens because Hugo's Markdown processor strips trailing blank lines from inside fenced code blocks before the content reaches the YAML parser. If the property with trailing blank lines is the last property in the YAML block, the blank lines appear as trailing content in the code fence and Hugo removes them.
 
-The fix is to add a dummy property `eot: true` ("end of text") as the **last** property in the YAML block. This ensures the trailing blank lines in the `text` or `replacement` value are interior to the code fence rather than trailing, so Hugo preserves them.
+The fix requires two things:
+
+1. Use the YAML block scalar **keep chomping indicator** (`|+` instead of `|`) on the property value. Without `+`, YAML's default "clip" chomping strips trailing newlines from the value before the clickable action sees it.
+2. Add a dummy property `eot: true` ("end of text") as the **last** property in the YAML block. This ensures the trailing blank lines in the `text` or `replacement` value are interior to the code fence rather than trailing, so Hugo preserves them.
+
+Both are required — `|+` alone fails because Hugo still strips the trailing blank lines from the code fence, and `eot: true` alone fails because YAML's clip chomping removes them.
 
 **WRONG — trailing blank line in `text` is silently stripped by Hugo:**
 
@@ -143,19 +148,19 @@ text: |
 ```
 ````
 
-**CORRECT — `eot: true` preserves the trailing blank line:**
+**CORRECT — `|+` preserves in YAML, `eot: true` preserves in Hugo:**
 
 ````markdown
 ```editor:insert-lines-before-selection
 file: ~/exercises/app.py
-text: |
+text: |+
   # --- Section boundary ---
 
 eot: true
 ```
 ````
 
-The `eot: true` property has no meaning to the clickable action itself — it exists solely to prevent Hugo from discarding trailing blank lines. Use it whenever a `text`, `replacement`, or other block scalar property needs to end with one or more blank lines. This applies to any editor clickable action with text content, including `editor:create-file`, `editor:append-lines-to-file`, `editor:prepend-lines-to-file`, `editor:replace-text-selection`, `editor:replace-matching-text`, `editor:insert-lines-before-selection`, `editor:append-lines-after-selection`, and others.
+The `eot: true` property has no meaning to the clickable action itself — it exists solely to prevent Hugo from discarding trailing blank lines. The `+` modifier on the block scalar tells YAML to keep trailing newlines rather than stripping them. Use both together whenever a `text`, `replacement`, or other block scalar property needs to end with one or more blank lines. This applies to any editor clickable action with text content, including `editor:create-file`, `editor:append-lines-to-file`, `editor:prepend-lines-to-file`, `editor:replace-text-selection`, `editor:replace-matching-text`, `editor:insert-lines-before-selection`, `editor:append-lines-after-selection`, and others.
 
 ## All Clickable Action Types
 

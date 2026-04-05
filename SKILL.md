@@ -201,19 +201,19 @@ replacement: |2
 
 An alternative that avoids needing an indent indicator: expand the match to include enclosing context that starts at column 1. For example, instead of matching only an indented function body, include the function definition line (e.g., `def my_function():`) so the first line of the block scalar has no leading spaces and a plain `|` suffices. This works well for top-level functions but may not help for class methods or other constructs that are themselves indented. See the editor file actions reference for full details on indent indicators.
 
-**Critical YAML safety rule for trailing blank lines in text properties:** When an editor clickable action's `text` or `replacement` property ends with one or more blank lines, Hugo's Markdown processor will silently strip those trailing blank lines from the code fence before the YAML is parsed — but only if the property is the last in the YAML block. To preserve trailing blank lines, add `eot: true` as the final property in the YAML. For example:
+**Critical YAML safety rule for trailing blank lines in text properties:** When an editor clickable action's `text` or `replacement` property ends with one or more blank lines, those blank lines can be lost at two stages: YAML's default "clip" chomping strips trailing newlines from block scalar values, and Hugo's Markdown processor strips trailing blank lines from code fences. To preserve trailing blank lines, you must do both of the following: use the `+` keep chomping indicator on the block scalar (`|+` instead of `|`), and add `eot: true` as the final property in the YAML. For example:
 
 ````markdown
 ```editor:insert-lines-before-selection
 file: ~/exercises/app.py
-text: |
+text: |+
   # --- Section boundary ---
 
 eot: true
 ```
 ````
 
-The `eot: true` property has no meaning to the clickable action — it exists solely to prevent Hugo from discarding the trailing blank lines. See the "Trailing blank lines in text properties" section in the clickable actions reference for detailed guidance.
+The `|+` tells YAML to keep trailing newlines, and the `eot: true` property (which has no meaning to the clickable action) ensures the blank lines are not trailing content in the code fence where Hugo would strip them. See the "Trailing blank lines in text properties" section in the clickable actions reference for detailed guidance.
 
 #### Tracking Terminal Working Directory
 
@@ -352,7 +352,7 @@ After generating workshop instruction pages, verify the following:
 
 **YAML syntax in editor actions:**
 - [ ] Every `editor:select-matching-text`, `editor:replace-matching-text`, or similar action where `match`, `replacement`, or `text` content starts with leading spaces uses a YAML block scalar indent indicator (`|2`, `|4`, etc.) — or the match has been expanded to include enclosing context that starts at column 1 so a plain `|` suffices
-- [ ] Every editor clickable action where the `text` or `replacement` property ends with trailing blank lines includes `eot: true` as the final YAML property to prevent Hugo from stripping those blank lines
+- [ ] Every editor clickable action where the `text` or `replacement` property ends with trailing blank lines uses the `|+` keep chomping indicator and includes `eot: true` as the final YAML property to prevent YAML and Hugo from stripping those blank lines
 
 **Guided instruction:**
 - [ ] All code viewing uses editor clickable actions (`editor:open-file`, `editor:select-matching-text`) — not plain code blocks or terminal commands like `cat`
